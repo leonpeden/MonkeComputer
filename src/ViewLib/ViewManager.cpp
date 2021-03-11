@@ -1,5 +1,7 @@
-#include "Components/ViewManager.hpp"
-#include "Components/ViewSystem.hpp"
+#include "ViewLib/ViewManager.hpp"
+#include "KeyExtension.hpp"
+#include "typedefs.h"
+#include "ViewLib/CustomComputer.hpp"
 
 DEFINE_CLASS(GorillaUI::Components::ViewManager);
 
@@ -9,26 +11,25 @@ namespace GorillaUI::Components
 {
     void ViewManager::Activate()
     {
-        this->DidActivate(!activatedBefore);
-        if (activeView) activeView->Activate();
+        #warning issues with DidActivate when it does not exist F
+        /*auto* method = il2cpp_utils::FindMethodUnsafe((Il2CppObject*)this, "DidActivate", 1);
+        if (method) 
+        {
+            getLogger().info("DidActivate was found!");
+            il2cpp_utils::RunMethod(this, method, !activatedBefore);
+        }*/
+        if (activeView)
+        {
+            activeView->Activate();
+        } 
         activatedBefore = true;
     }
 
     void ViewManager::Deactivate()
     {
-        DidDeactivate();
+        il2cpp_utils::RunMethod(this, "DidDeactivate");
     }
-
-    void ViewManager::DidActivate(bool firstActivation)
-    {
-        getLogger().info("Default ViewManager DidActivate was called, firstActivation: %d", firstActivation);
-    }
-
-    void ViewManager::DidDeactivate()
-    {
-        getLogger().info("Default ViewManager DidDeactivate was called");
-    }
-
+   
     void ViewManager::PresentViewManager(GorillaUI::Components::ViewManager* manager)
     {
         static Vector3 zero = {0.0f, 0.0f, 0.0f};
@@ -40,7 +41,7 @@ namespace GorillaUI::Components
 
         activeView->Deactivate();
         manager->Activate();
-        ViewSystem::activeViewManager = manager;
+        CustomComputer::instance->activeViewManager = this;
     }
 
     void ViewManager::DismissViewManager(GorillaUI::Components::ViewManager* manager)
@@ -49,28 +50,15 @@ namespace GorillaUI::Components
         manager->activeView->Deactivate();
         manager->Deactivate();
         activeView->Activate();
-        ViewSystem::activeViewManager = this;
+        CustomComputer::instance->activeViewManager = this;
     }
 
     void ViewManager::ReplaceTopView(GorillaUI::Components::View* view)
     {
         if (activeView) activeView->Deactivate();
         activeView = view;
-        Il2CppObject* viewTransform = activeView->transform();
-        il2cpp_utils::RunMethod(viewTransform, "SetParent", transform());
         activeView->Activate();
-    }
-
-    void ViewManager::BackButtonWasPressed(GorillaUI::Components::View* view)
-    {
-        if (!parentViewManager) return;
-        parentViewManager->DismissViewManager(this);
-    }
-
-    void ViewManager::PressButton(GorillaKeyboardButton* button)
-    {
-        if (activeView) 
-            activeView->HandleInput(button->characterString);
+        CustomComputer::instance->Redraw();
     }
 
     Il2CppObject* ViewManager::transform()

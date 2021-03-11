@@ -10,6 +10,10 @@
 #include "GorillaUI.hpp"
 #include "GorillaUI/MainView.hpp"
 #include "GorillaUI/MainViewManager.hpp"
+#include "Test/TestView.hpp"
+
+#include "ViewLib/CustomComputer.hpp"
+#include "Register.hpp"
 
 #include "typedefs.h"
 #include <vector>
@@ -29,25 +33,16 @@ Logger& getLogger()
 #define ERROR(value...) getLogger().error(value)
 #define run(value...) CRASH_UNLESS(il2cpp_utils::RunMethod(value))
 
-
-void UseGorillaUI(Il2CppObject* self);
-
 std::string dataDir = "";
 
-MAKE_HOOK_OFFSETLESS(Player_Awake, void, Il2CppObject* self)
+MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, Il2CppObject* self)
 {
-    Player_Awake(self);
-    
-    UseGorillaUI(self);
-}
+    GorillaComputer_Start(self);
 
-void UseGorillaUI(Il2CppObject* self)
-{
-    Vector3 euler = {0.0f, -90.0f, 0.0f};
-    Vector3 pos = {-69.0f, 12.74f, -83.04f};
-    
-    //ViewSystem* viewSystem = CreateViewSystem(il2cpp_utils::GetClassFromName("GorillaUI", "MainViewManager"), pos, euler);
-    ViewSystem* ViewSystem = CreateViewSystem<GorillaUI::MainViewManager*>(pos, euler);
+    Il2CppObject* computerGO = *il2cpp_utils::RunMethod(self, "get_gameObject");
+    CustomComputer* computer = *il2cpp_utils::RunGenericMethod<CustomComputer*>(computerGO, "AddComponent", std::vector<Il2CppClass*>{classof(GorillaUI::CustomComputer*)});
+    computer->Init(CreateView<MainView*>());
+    getLogger().info("End of start");
 }
 
 extern "C" void setup(ModInfo& info)
@@ -63,12 +58,16 @@ extern "C" void load()
 {
     INFO("Loading mod...");
 
-    INSTALL_HOOK_OFFSETLESS(getLogger(), Player_Awake, il2cpp_utils::FindMethodUnsafe("GorillaLocomotion", "Player", "Awake", 0));
+    INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     
     using namespace GorillaUI::Components;
-    custom_types::Register::RegisterType<Field>();
-    custom_types::Register::RegisterType<InputField>();
-    custom_types::Register::RegisterTypes<View, ViewManager, ViewSystem, GorillaKeyboardButton>();
+    custom_types::Register::RegisterTypes<View, ViewManager>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
+    custom_types::Register::RegisterType<TestView>();
+    custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
+
+
+    GorillaUI::Register::RegisterModView<TestView*>("TestView", "1.0.0");
+    GorillaUI::Register::RegisterModView<TestView*>("TestView2", "1.0.0");
     INFO("Mod Loaded!");
 }
