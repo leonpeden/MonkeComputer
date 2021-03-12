@@ -6,6 +6,7 @@
 #include "InputHandlers/UITextInputHandler.hpp"
 #include "GorillaUI/ModSettingsView/ModSettingsViewManager.hpp"
 #include "GorillaUI/BaseGameViews/BaseGameViewManager.hpp"
+#include "GorillaUI/DetailView.hpp"
 
 DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View, 
     DECLARE_METHOD(void, Awake);
@@ -20,7 +21,8 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::ModSettingsViewManager* modSettingsViewManager = nullptr;
         GorillaUI::BaseGameViewManager* baseGameViewManager = nullptr;
-    
+        GorillaUI::DetailView* detailView = nullptr;
+
     REGISTER_FUNCTION(MainView,
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(ShowView);

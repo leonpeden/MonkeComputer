@@ -22,6 +22,7 @@ namespace GorillaUI
         {
             numberInputHandlers[i] = new UINumberInputHandler(EKeyboardKey::Enter, false);
             numberInputHandlers[i]->number = (int)(start[i] * 255);
+            numberInputHandlers[i]->max = 255;
         }
     }
 
@@ -41,6 +42,12 @@ namespace GorillaUI
         float r = (float)numberInputHandlers[0]->number / 255.0f;
         float g = (float)numberInputHandlers[1]->number / 255.0f;
         float b = (float)numberInputHandlers[2]->number / 255.0f;
+
+        Color col = BaseGameInterface::PlayerColor::get_color();
+        if (col.r == r && col.g == g && col.b == b)
+        {
+            return;
+        }
         BaseGameInterface::SetColor(r, g, b);
     }
 
@@ -77,7 +84,6 @@ namespace GorillaUI
         selectionHandler->HandleKey((EKeyboardKey)key);
         UINumberInputHandler* currentNumberHandler = numberInputHandlers[selectionHandler->currentSelectionIndex];
         currentNumberHandler->HandleKey((EKeyboardKey)key);
-        if (currentNumberHandler->number > 255) currentNumberHandler->number = 255;
         Redraw();
     }
 }

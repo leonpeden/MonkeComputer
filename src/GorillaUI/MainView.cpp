@@ -2,12 +2,12 @@
 #include "GorillaUI.hpp"
 #include "Register.hpp"
 #include "ViewLib/CustomComputer.hpp"
-
+#include "Helpers/SelectionHelper.hpp"
 DEFINE_CLASS(GorillaUI::MainView);
 
 extern Logger& getLogger();
 
-#define MENU_OPTIONS 2
+#define MENU_OPTIONS 3
 
 namespace GorillaUI
 {
@@ -33,12 +33,17 @@ namespace GorillaUI
         switch(index)
         {
             case 0:
+                if (!baseGameViewManager) baseGameViewManager = CreateViewManager<BaseGameViewManager*>();
+                CustomComputer::instance->activeViewManager->PresentViewManager(baseGameViewManager);
+                break;
+            case 1:
                 if (!modSettingsViewManager) modSettingsViewManager = CreateViewManager<ModSettingsViewManager*>();
                 CustomComputer::instance->activeViewManager->PresentViewManager(modSettingsViewManager);
                 break;
-            case 1:
-                if (!baseGameViewManager) baseGameViewManager = CreateViewManager<BaseGameViewManager*>();
-                CustomComputer::instance->activeViewManager->PresentViewManager(baseGameViewManager);
+            case 2:
+                if (!detailView) detailView = CreateView<DetailView*>();
+                CustomComputer::instance->activeViewManager->ReplaceTopView(detailView);
+                break;
             default:
                 getLogger().error("Selected view was out of range"); 
                 break;
@@ -65,21 +70,13 @@ namespace GorillaUI
     
     void MainView::DrawSubMenus()
     {
-        for (int i = 0; i < MENU_OPTIONS; i++)
-        {
-            text += selectionHandler->currentSelectionIndex == i ? "<color=#ed6540>></color> " : "  ";
-            switch(i)
-            {
-                case 0:
-                    text += "Mod Settings";
-                    break;
-                case 1:
-                    text += "Base Game Settings";
-                default:
-                    break;
-            }
-            text += "\n";
-        }
+        std::vector<std::string> options = {
+            "Game Settings",
+            "Mod Settings",
+            "Details"
+        };
+
+        SelectionHelper::DrawSelection(options, selectionHandler->currentSelectionIndex, text);
     }
     
     void MainView::OnKeyPressed(int key)

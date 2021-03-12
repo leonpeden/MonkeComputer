@@ -21,6 +21,7 @@ namespace GorillaUI
         {
             numberInputHandlers[i] = new UINumberInputHandler(EKeyboardKey::Enter, false);
             numberInputHandlers[i]->number = (int)(start[i] * 255);
+            numberInputHandlers[i]->max = 255;
         }
     }
 
@@ -40,11 +41,8 @@ namespace GorillaUI
         float r = (float)numberInputHandlers[0]->number / 255.0f;
         float g = (float)numberInputHandlers[1]->number / 255.0f;
         float b = (float)numberInputHandlers[2]->number / 255.0f;
-        Color color = {r, g, b};
         
-        CustomComputer::instance->set_screenColor(color);
-        config.screenColor = color;
-        SaveConfig();
+        CustomComputer::instance->SetBG(r, g, b);
     }
 
     void MonkeComputerConfigView::Redraw()
@@ -79,7 +77,6 @@ namespace GorillaUI
         selectionHandler->HandleKey((EKeyboardKey)key);
         UINumberInputHandler* currentNumberHandler = numberInputHandlers[selectionHandler->currentSelectionIndex];
         currentNumberHandler->HandleKey((EKeyboardKey)key);
-        if (currentNumberHandler->number > 255) currentNumberHandler->number = 255;
         Redraw();
     }
 }

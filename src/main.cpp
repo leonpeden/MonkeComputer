@@ -8,6 +8,7 @@
 
 #include "custom-types/shared/register.hpp"
 #include "GorillaUI.hpp"
+#include "GorillaUI/DetailView.hpp"
 #include "GorillaUI/MainView.hpp"
 #include "GorillaUI/MainViewManager.hpp"
 #include "GorillaUI/ModSettingsView/ModSettingsView.hpp"
@@ -74,7 +75,7 @@ extern "C" void load()
     
     using namespace GorillaUI::Components;
     custom_types::Register::RegisterTypes<View, ViewManager>();
-    custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView>();
+    custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView, DetailView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
     custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
 

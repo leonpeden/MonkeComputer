@@ -13,7 +13,8 @@ namespace GorillaUI
             int number = 0;
             bool HandleKey(EKeyboardKey key);
             std::function<void(int)> numberCallback = &nullopt;
-            
+            int min = 0;
+            int max = 0;
         private:
             const EKeyboardKey _selectKey;
             const bool _canSelect;

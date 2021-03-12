@@ -29,6 +29,7 @@ namespace GorillaUI
 
     void NameChangeView::EnterName(std::string code)
     {
+        if (code == BaseGameInterface::Name::get_name()) return;
         BaseGameInterface::SetName(code);
     }
 

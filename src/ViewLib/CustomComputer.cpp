@@ -27,6 +27,16 @@ namespace GorillaUI
 
         //il2cpp_utils::SetFieldValue(gorillaComputer, "instance", gorillaComputer);
 
+        Il2CppObject* transform = *il2cpp_utils::RunMethod(gorillaComputer, "get_transform");
+        Il2CppObject* keyboardTransform = *il2cpp_utils::RunMethod(transform, "Find", il2cpp_utils::createcsstr("keyboard"));
+        Il2CppObject* keyboardGO =  *il2cpp_utils::RunMethod(keyboardTransform, "get_gameObject");
+        
+        std::vector<Il2CppClass*> klass = {il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")};
+        Il2CppObject* meshRenderer = *il2cpp_utils::RunGenericMethod(keyboardGO, "GetComponent", klass);
+        Il2CppObject* material = *il2cpp_utils::RunMethod(meshRenderer, "get_material");
+        Color kbColor = {0.5f, 0.5f, 0.5f};
+        
+        il2cpp_utils::RunMethod(material, "set_color", kbColor);
         ReplaceKeys(); 
         screenInfo = CreateMonitor();
         Redraw();
@@ -55,7 +65,7 @@ namespace GorillaUI
 
         Vector3 localScale = {0.4f, 0.4f, 0.4f};
         Vector3 eulerAngles = {0.0f, 90.0f, 0.0f};
-        Vector3 position = {-69.0f, 12.2f, -82.8f};
+        Vector3 position = {-69.0f, 12.11f, -82.8f};
 
         Il2CppObject* newMonitorTransform = *il2cpp_utils::RunMethod(newMonitor, "get_transform");
 
@@ -79,6 +89,8 @@ namespace GorillaUI
     void CustomComputer::SetBG(float r, float g, float b)
     {
         screenInfo.set_color({r, g, b});
+        config.screenColor = {r, g, b};
+        SaveConfig();
     }
     
     void CustomComputer::ReplaceKeys()
@@ -216,10 +228,5 @@ namespace GorillaUI
     void CustomComputer::PressButton(GorillaKeyboardButton* button)
     {
         if (activeViewManager) il2cpp_utils::RunMethod(activeViewManager, "NotifyOfKeyPress", (int)button->key);
-    }
-
-    void CustomComputer::set_screenColor(Color color)
-    {
-        screenInfo.set_color(color);
     }
 }

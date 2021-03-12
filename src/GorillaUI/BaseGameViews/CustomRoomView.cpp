@@ -29,11 +29,18 @@ namespace GorillaUI
     void CustomRoomView::Update()
     {
         float time = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
-        if (time > (lastUpdatedTime + 1.0f) && BaseGameInterface::Room::get_isConnectedToMaster())
+        //bool connected = BaseGameInterface::Room::get_isConnectedToMaster();
+        if (time > (lastUpdatedTime + 1.0f))// && connected)
         {
             Redraw();
             lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
         }
+        /*
+        else
+        {
+            getLogger().info("Time was: %.2f, last time was %.2f, connected to master was: %d", time, lastUpdatedTime, connected);
+        }
+        */
     }
 
     void CustomRoomView::EnterCode(std::string code)

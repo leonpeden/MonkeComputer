@@ -50,5 +50,15 @@ namespace GorillaUI
             number *= 10;
             number += (int)(c - '0');
         }
+
+        if (min != max)
+        {
+            if (number < min)
+                number = min;
+            if (number > max)
+                number = max;
+            
+            numberString = string_format("%d", number);
+        }
     }
 }
