@@ -13,6 +13,8 @@ namespace GorillaUI
     void CustomRoomView::Awake()
     {
         if (!textInputHandler) textInputHandler = new UITextInputHandler(EKeyboardKey::Enter, true);
+        if (!optionInputHandler) optionInputHandler = new UIOptionInputHandler(EKeyboardKey::Enter, false);
+        lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
     }
 
     void CustomRoomView::DidActivate(bool firstActivation)
@@ -20,10 +22,17 @@ namespace GorillaUI
         std::function<void(std::string)> fun = std::bind(&CustomRoomView::EnterCode, this, std::placeholders::_1);
         textInputHandler->textCallback = fun;
         textInputHandler->text = BaseGameInterface::Room::get_roomID();
-        
-        if (firstActivation)
+        Redraw();
+        lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+    }
+
+    void CustomRoomView::Update()
+    {
+        float time = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+        if (time > (lastUpdatedTime + 1.0f) && BaseGameInterface::Room::get_isConnectedToMaster())
         {
             Redraw();
+            lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
         }
     }
 
@@ -49,14 +58,29 @@ namespace GorillaUI
     
     void CustomRoomView::DrawCode()
     {
+        text += "  <size=40>Press enter to join or create a room with the entered code</size>\n";
+        text += string_format("  Your Entered room code:\n  <color=#fdfdfd>%s</color>\n\n", textInputHandler->text.c_str());
+        text += "\n  <size=40>Press Option 1 to Disconnect from the current room</size>\n";
+        char playerCount = BaseGameInterface::Room::get_playerCount();
+        text += playerCount > 0 ? string_format("  Current Room: <color=#fdfdfd>%s</color>\n", BaseGameInterface::Room::get_roomID().c_str()) : "";
+        text += playerCount > 0 ? string_format("  Players in room: <color=#fdfdfd>%d</color>", playerCount) : "  Not in a room";
         text += "\n";
-        text += string_format("  Your inputted room code: %s", textInputHandler->text.c_str());
+        text += string_format("  Players online: <color=#fdfdfd>%d</color>", BaseGameInterface::Room::get_currentPlayers());
+        text += "\n";
     }
     
     void CustomRoomView::OnKeyPressed(int key)
     {
         textInputHandler->HandleKey((EKeyboardKey)key);
-        if (textInputHandler->text.size() > 12) textInputHandler->text = textInputHandler->text.substr(0, 12);
+        if (textInputHandler->text.size() > 10) textInputHandler->text = textInputHandler->text.substr(0, 10);
+
+        if (optionInputHandler->HandleKey((EKeyboardKey)key))
+        {
+            if (optionInputHandler->currentOption == EKeyboardKey::Option1)
+            {
+                BaseGameInterface::Disconnect();
+            }
+        }
         Redraw();
     }
 }

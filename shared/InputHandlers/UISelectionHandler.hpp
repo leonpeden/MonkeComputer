@@ -15,7 +15,7 @@ namespace GorillaUI
             int min = 0;
             int max = 0;
             int currentSelectionIndex = 0;
-            bool HandleKeyPress(GorillaUI::EKeyboardKey key);
+            bool HandleKey(GorillaUI::EKeyboardKey key);
 
         private:
             const GorillaUI::EKeyboardKey _upKey;

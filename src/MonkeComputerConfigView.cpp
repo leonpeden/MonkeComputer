@@ -1,23 +1,22 @@
-#include "GorillaUI/BaseGameViews/ColorChangeView.hpp"
+#include "MonkeComputerConfigView.hpp"
 #include "GorillaUI.hpp"
 #include "Register.hpp"
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
+#include "config.hpp"
 #include "Helpers/SelectionHelper.hpp"
-
-DEFINE_CLASS(GorillaUI::ColorChangeView);
+DEFINE_CLASS(GorillaUI::MonkeComputerConfigView);
 
 extern Logger& getLogger();
 
 namespace GorillaUI
 {
-    void ColorChangeView::Awake()
+    void MonkeComputerConfigView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
         selectionHandler->max = 3;
 
-        Color col = BaseGameInterface::PlayerColor::get_color();
-        float* start = &col.r;
+        float* start = &config.screenColor.r;
         for (int i = 0; i < 3; i++)
         {
             numberInputHandlers[i] = new UINumberInputHandler(EKeyboardKey::Enter, false);
@@ -25,9 +24,9 @@ namespace GorillaUI
         }
     }
 
-    void ColorChangeView::DidActivate(bool firstActivation)
+    void MonkeComputerConfigView::DidActivate(bool firstActivation)
     {
-        std::function<void(int)> fun = std::bind(&ColorChangeView::UpdateColor, this, std::placeholders::_1);
+        std::function<void(int)> fun = std::bind(&MonkeComputerConfigView::UpdateColor, this, std::placeholders::_1);
         selectionHandler->selectionCallback = fun;
         
         if (firstActivation)
@@ -36,15 +35,19 @@ namespace GorillaUI
         }
     }
 
-    void ColorChangeView::UpdateColor(int num)
+    void MonkeComputerConfigView::UpdateColor(int num)
     {
         float r = (float)numberInputHandlers[0]->number / 255.0f;
         float g = (float)numberInputHandlers[1]->number / 255.0f;
         float b = (float)numberInputHandlers[2]->number / 255.0f;
-        BaseGameInterface::SetColor(r, g, b);
+        Color color = {r, g, b};
+        
+        CustomComputer::instance->set_screenColor(color);
+        config.screenColor = color;
+        SaveConfig();
     }
 
-    void ColorChangeView::Redraw()
+    void MonkeComputerConfigView::Redraw()
     {
         text = "";
 
@@ -54,15 +57,14 @@ namespace GorillaUI
         CustomComputer::Redraw();
     }
     
-    void ColorChangeView::DrawHeader()
+    void MonkeComputerConfigView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Color Config</color> ==</color>\n";
+        text += "<color=#ffff00>== <color=#fdfdfd>Monke Computer</color> ==</color>\n";
     }
     
-    void ColorChangeView::DrawColors()
+    void MonkeComputerConfigView::DrawColors()
     {
-        
-        text += "\n Gorilla Color:\n  <size=40>select values between 0 - 255</size>\n";
+        text += "\n Monitor Color:<size=40>\n  select values between 0 - 255\n</size>";
         std::vector<std::string> colors = {
             string_format("Red:   <color=#fdfdfd>%d</color>", numberInputHandlers[0]->number),
             string_format("Green: <color=#fdfdfd>%d</color>", numberInputHandlers[1]->number),
@@ -72,7 +74,7 @@ namespace GorillaUI
         SelectionHelper::DrawSelection(colors, selectionHandler->currentSelectionIndex, text);
     }
     
-    void ColorChangeView::OnKeyPressed(int key)
+    void MonkeComputerConfigView::OnKeyPressed(int key)
     {
         selectionHandler->HandleKey((EKeyboardKey)key);
         UINumberInputHandler* currentNumberHandler = numberInputHandlers[selectionHandler->currentSelectionIndex];

@@ -12,7 +12,7 @@ namespace GorillaUI
     void ModSettingsView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = Register::get_entries().size() - 1;
+        selectionHandler->max = Register::get_entries().size();
     }
 
     void ModSettingsView::DidActivate(bool firstActivation)
@@ -75,7 +75,7 @@ namespace GorillaUI
     
     void ModSettingsView::OnKeyPressed(int key)
     {
-        selectionHandler->HandleKeyPress((EKeyboardKey)key);
+        selectionHandler->HandleKey((EKeyboardKey)key);
         Redraw();
     }
 }

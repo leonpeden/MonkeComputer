@@ -2,6 +2,8 @@
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "beatsaber-hook/shared/utils/utils.h"
 
+extern Logger& getLogger();
+
 namespace GorillaUI::BaseGameInterface
 {
     void SetColor(float r, float g, float b)
@@ -112,7 +114,7 @@ namespace GorillaUI::BaseGameInterface
         if (currentRoom)
         {
             Il2CppString* currentRoomCsName = *il2cpp_utils::RunMethod<Il2CppString*>(currentRoom, "get_Name");
-            std::string currentRoomName = to_utf8(csstrtostr(currentRoomCsName));
+            currentRoomName = to_utf8(csstrtostr(currentRoomCsName));
         }
 
         if (*il2cpp_utils::RunMethod<bool>("Photon.Pun", "PhotonNetwork", "get_InRoom") && currentRoomName != roomID)
@@ -235,7 +237,7 @@ namespace GorillaUI::BaseGameInterface
         {
             if (turnType.find("SNAP") != std::string::npos) return 0;
             else if (turnType.find("SMOOTH") != std::string::npos) return 1;
-            else return 0;
+            else return 2;
         }
     }
 
@@ -261,19 +263,37 @@ namespace GorillaUI::BaseGameInterface
 
     namespace Room
     {
+        bool get_isConnectedToMaster()
+        {
+            Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
+            return *il2cpp_utils::GetFieldValue<bool>(gorillaComputer, "isConnectedToMaster");
+        }
+
         std::string get_roomID()
         {
             std::string currentRoomName = "";
 
-            Il2CppObject* currentRoom = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_CurrentRoom");
+            Il2CppObject* currentRoom = *il2cpp_utils::GetPropertyValue("Photon.Pun", "PhotonNetwork", "CurrentRoom");
 
             if (currentRoom)
             {
                 Il2CppString* currentRoomCsName = *il2cpp_utils::RunMethod<Il2CppString*>(currentRoom, "get_Name");
-                std::string currentRoomName = to_utf8(csstrtostr(currentRoomCsName));
+                currentRoomName = to_utf8(csstrtostr(currentRoomCsName));
             }
 
             return currentRoomName;
+        }
+
+        int get_currentPlayers()
+        {
+            return *il2cpp_utils::RunMethod<int>("Photon.Pun", "PhotonNetwork", "get_CountOfPlayersInRooms");
+        }
+
+        char get_playerCount()
+        {
+            Il2CppObject* currentRoom = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_CurrentRoom");
+            if (!currentRoom) return 0;
+            return *il2cpp_utils::RunMethod<char>(currentRoom, "get_PlayerCount");
         }
     }
 }

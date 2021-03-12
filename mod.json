@@ -11,9 +11,18 @@
         "libmonkecomputer.so"
     ],
     "libraryFiles": [
-        "libbeatsaber-hook_1_0_12.so",
+        "libbeatsaber-hook_1_1_0.so",
+        "libbeatsaber-hook_1_1_2.so",
         "libcustom-types.so"
     ],
     "fileCopies": [
+        {
+            "name": "monitor.json",
+            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor/monitor.json"
+        },
+        {
+            "name": "monitor",
+            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor/monitor"
+        }
     ]
 }

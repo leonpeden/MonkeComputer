@@ -20,13 +20,15 @@
 #include "GorillaUI/BaseGameViews/TurnChangeView.hpp"
 #include "GorillaUI/BaseGameViews/NameChangeView.hpp"
 
-#include "Test/TestView.hpp"
+#include "MonkeComputerConfigView.hpp"
 
 #include "ViewLib/CustomComputer.hpp"
 #include "Register.hpp"
 
 #include "typedefs.h"
 #include <vector>
+
+#include "config.hpp"
 
 using namespace GorillaUI;
 using namespace GorillaUI::Components;
@@ -52,7 +54,6 @@ MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, Il2CppObject* self)
     Il2CppObject* computerGO = *il2cpp_utils::RunMethod(self, "get_gameObject");
     CustomComputer* computer = *il2cpp_utils::RunGenericMethod<CustomComputer*>(computerGO, "AddComponent", std::vector<Il2CppClass*>{classof(GorillaUI::CustomComputer*)});
     computer->Init(CreateView<MainView*>());
-    getLogger().info("End of start");
 }
 
 extern "C" void setup(ModInfo& info)
@@ -67,21 +68,20 @@ extern "C" void setup(ModInfo& info)
 extern "C" void load()
 {
     INFO("Loading mod...");
-
+    if (!LoadConfig())
+            SaveConfig();
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     
     using namespace GorillaUI::Components;
     custom_types::Register::RegisterTypes<View, ViewManager>();
     custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
-    custom_types::Register::RegisterType<TestView>();
     custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
 
     custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
-
-    GorillaUI::Register::RegisterView<TestView*>("TestView", "1.0.0");
-    GorillaUI::Register::RegisterView<TestView*>("TestView2", "1.0.0");
+    custom_types::Register::RegisterType<MonkeComputerConfigView>();
+    GorillaUI::Register::RegisterView<MonkeComputerConfigView*>("Monke Computer", "1.0.0");
     INFO("Mod Loaded!");
 }

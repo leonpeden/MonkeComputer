@@ -27,10 +27,7 @@ namespace GorillaUI::Components
         static Vector3 zero = {0.0f, 0.0f, 0.0f};
         childViewManager = manager;
         manager->parentViewManager = this;
-        il2cpp_utils::RunMethod(manager->transform(), "SetParent", transform());
-        il2cpp_utils::RunMethod(manager->transform(), "set_localPosition", zero);
-        il2cpp_utils::RunMethod(manager->transform(), "set_localEulerAngles", zero);
-
+        
         activeView->Deactivate();
         manager->Activate();
         CustomComputer::instance->activeViewManager = manager;

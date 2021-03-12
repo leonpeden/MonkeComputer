@@ -4,7 +4,7 @@ namespace GorillaUI
 {
     UISelectionHandler::UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect) : _upKey(upKey), _downKey(downKey), _selectKey(selectKey), _canSelect(canSelect) {};
 
-    bool UISelectionHandler::HandleKeyPress(GorillaUI::EKeyboardKey key)
+    bool UISelectionHandler::HandleKey(GorillaUI::EKeyboardKey key)
     {
         if (key == _upKey)
         {
@@ -41,9 +41,9 @@ namespace GorillaUI
 
     void UISelectionHandler::ClampSelection()
     {
-        if (currentSelectionIndex > max)
+        if (currentSelectionIndex >= max)
         {
-            currentSelectionIndex = max;
+            currentSelectionIndex = max - 1;
             return;
         }
 

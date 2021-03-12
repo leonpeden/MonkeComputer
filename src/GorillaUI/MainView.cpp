@@ -14,7 +14,7 @@ namespace GorillaUI
     void MainView::Awake()
     {
         selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = MENU_OPTIONS - 1;
+        selectionHandler->max = MENU_OPTIONS;
     }
 
     void MainView::DidActivate(bool firstActivation)
@@ -84,7 +84,7 @@ namespace GorillaUI
     
     void MainView::OnKeyPressed(int key)
     {
-        selectionHandler->HandleKeyPress((EKeyboardKey)key);
+        selectionHandler->HandleKey((EKeyboardKey)key);
         Redraw();
     }
 }

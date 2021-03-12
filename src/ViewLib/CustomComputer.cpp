@@ -3,6 +3,7 @@
 #include "KeyExtension.hpp"
 #include "cosmeticsloader/shared/CosmeticLoader.hpp"
 #include "GorillaUI/MainViewManager.hpp"
+#include "config.hpp"
 
 DEFINE_CLASS(GorillaUI::CustomComputer);
 using namespace GorillaUI::Components;
@@ -69,7 +70,7 @@ namespace GorillaUI
         info.renderer = *il2cpp_utils::RunGenericMethod(newMonitor, "GetComponentInChildren", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")});
         info.materials = *il2cpp_utils::RunMethod<Array<Il2CppObject*>*>(info.renderer, "get_materials");
 
-        info.set_color({0.05f, 0.05f, 0.05f});
+        info.set_color(config.screenColor);
         info.set_fontSize(80);
         
         return info;
@@ -215,5 +216,10 @@ namespace GorillaUI
     void CustomComputer::PressButton(GorillaKeyboardButton* button)
     {
         if (activeViewManager) il2cpp_utils::RunMethod(activeViewManager, "NotifyOfKeyPress", (int)button->key);
+    }
+
+    void CustomComputer::set_screenColor(Color color)
+    {
+        screenInfo.set_color(color);
     }
 }

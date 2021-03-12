@@ -50,7 +50,8 @@ namespace GorillaUI
     void NameChangeView::DrawName()
     {
         text += "\n";
-        text += string_format("  Your inputted name is: %s", textInputHandler->text.c_str());
+        text += "  <size=40>Press enter to change your name:</size>\n";
+        text += string_format("  Your entered name:\n  <color=#fdfdfd>%s</color>\n", textInputHandler->text.c_str());
     }
     
     void NameChangeView::OnKeyPressed(int key)

@@ -3,6 +3,7 @@
 #include "Register.hpp"
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
+#include "Helpers/SelectionHelper.hpp"
 
 DEFINE_CLASS(GorillaUI::TurnChangeView);
 
@@ -13,11 +14,11 @@ namespace GorillaUI
     void TurnChangeView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = 2;
+        selectionHandler->max = 3;
 
         if (!turnValueHandler) turnValueHandler = new UISelectionHandler(EKeyboardKey::Left, EKeyboardKey::Right, EKeyboardKey::Enter, false);
         turnValueHandler->min = 0;
-        turnValueHandler->max = 9;
+        turnValueHandler->max = 10;
 
         std::string turnType = BaseGameInterface::SnapTurn::get_turnType();
 
@@ -75,34 +76,23 @@ namespace GorillaUI
     
     void TurnChangeView::DrawTurn()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            text += "\n";
-            text += selectionHandler->currentSelectionIndex == i ? "<color=#ed6540>></color> " : "  ";
-            switch(i)
-            {
-                case 0:
-                    text += "SNAP";
-                    break;
-                case 1:
-                    text += "SMOOTH";
-                    break;
-                case 2:
-                    text += "NONE";
-                    break;
-                default:
-                    break;
-            }
-            text += "\n";
-        }
+        text += "<size=40>  Change your turning type here, the options speak for themselves\n  use up and down to select type,\n  use left and right to select speed\n</size>";
+        std::vector<std::string> types = {
+            "Snap turning",
+            "Smooth turning",
+            "None"
+        };
+
+        SelectionHelper::DrawSelection(types, selectionHandler->currentSelectionIndex, text);
+
         text += "\n";
-        text += string_format("  Turn Speed: <color=#adbdad><</color> %d <color=#adbdad>></color>\n", turnValueHandler->currentSelectionIndex);
+        text += string_format("  Turn Speed: <color=#adbdad>< <color=#fdfdfd>%d</color> ></color>\n", turnValueHandler->currentSelectionIndex);
     }
     
     void TurnChangeView::OnKeyPressed(int key)
     {
-        selectionHandler->HandleKeyPress((EKeyboardKey)key);
-        turnValueHandler->HandleKeyPress((EKeyboardKey)key);
+        selectionHandler->HandleKey((EKeyboardKey)key);
+        turnValueHandler->HandleKey((EKeyboardKey)key);
         Redraw();
     }
 }

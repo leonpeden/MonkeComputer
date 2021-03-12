@@ -37,6 +37,9 @@ namespace GorillaUI::BaseGameInterface
 
     namespace Room
     {
+        bool get_isConnectedToMaster();
         std::string get_roomID();
+        int get_currentPlayers();
+        char get_playerCount();
     }
 }

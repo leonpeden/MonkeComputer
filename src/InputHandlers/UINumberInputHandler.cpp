@@ -29,7 +29,7 @@ namespace GorillaUI
 
     void UINumberInputHandler::DeleteNum()
     {
-        numberString = numberString.substr(0, numberString.size() - 1);
+        numberString = "";
         UpdateNum();
     }
 

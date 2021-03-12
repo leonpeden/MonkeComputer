@@ -6,7 +6,7 @@
 #include "GorillaUI/BaseGameViews/NameChangeView.hpp"
 #include "GorillaUI/BaseGameViews/TurnChangeView.hpp"
 #include "GorillaUI/BaseGameViews/CustomRoomView.hpp"
-
+#include "Helpers/SelectionHelper.hpp"
 DEFINE_CLASS(GorillaUI::BaseGameView);
 
 extern Logger& getLogger();
@@ -16,7 +16,7 @@ namespace GorillaUI
     void BaseGameView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = 3;
+        selectionHandler->max = 4;
 
         customRoomView = nullptr;
         nameChangeView = nullptr;
@@ -77,33 +77,21 @@ namespace GorillaUI
     
     void BaseGameView::DrawViews()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            text += selectionHandler->currentSelectionIndex == i ? "<color=#ed6540>></color> " : "  ";
-            switch(i)
-            {
-                case 0:
-                    text += "Room Config";
-                    break;
-                case 1:
-                    text += "Name Config";
-                    break;
-                case 2:
-                    text += "Color Config";
-                    break;
-                case 3:
-                    text += "Turn Config";
-                    break;
-                default:
-                    break;
-            }
-            text += "\n";
-        }
+        text += " <size=40>Change the base game settings in this menu</size>\n";
+
+        std::vector<std::string> views = {
+                "Room Config",
+                "Name Config",
+                "Color Config",
+                "Turn Config"
+        };
+
+        SelectionHelper::DrawSelection(views, selectionHandler->currentSelectionIndex, text);
     }
     
     void BaseGameView::OnKeyPressed(int key)
     {
-        selectionHandler->HandleKeyPress((EKeyboardKey)key);
+        selectionHandler->HandleKey((EKeyboardKey)key);
         Redraw();
     }
 }
