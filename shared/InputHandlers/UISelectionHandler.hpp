@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 #include <vector>
-#include "EKeyboardKey.hpp"
+#include "../EKeyboardKey.hpp"
 
 namespace GorillaUI
 {
@@ -11,8 +11,7 @@ namespace GorillaUI
     {
         public:
             UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect);
-            using SelectionCallback = std::function<void(int)>;
-            SelectionCallback selectionCallback = &nullopt;
+            std::function<void(int)> selectionCallback = &nullopt;
             int min = 0;
             int max = 0;
             int currentSelectionIndex = 0;

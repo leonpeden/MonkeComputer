@@ -8,7 +8,7 @@ namespace GorillaUI
 {
     void TestView::Awake()
     {
-        selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
+        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
         selectionHandler->max = 4;
         activatedBefore = false;
     }
@@ -18,17 +18,14 @@ namespace GorillaUI
         if(firstActivation)
         {
             Redraw();
-            getLogger().info("Test View says hi");
         }
-        
     }
 
     void TestView::Redraw()
     {
-        getLogger().info("Redrawing test view");
         text = "";
 
-        text += "<color=#ffff00>==</color> TestView v1.0.0\n";
+        text += "<color=#ffff00>==</color> TestView v1.0.0 oooga booga\n";
 
         for (int i = 0; i < 5; i++)
         {
@@ -36,7 +33,7 @@ namespace GorillaUI
             text += string_format("Option %d\n", i);
         }
 
-        CustomComputer::instance->Redraw();
+        CustomComputer::Redraw();
     }
 
     void TestView::OnKeyPressed(int key)

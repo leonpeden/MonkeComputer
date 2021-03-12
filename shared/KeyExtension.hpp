@@ -1,5 +1,5 @@
 #pragma once
-#include "EKeyboardKey.hpp"
+#include "../shared/EKeyboardKey.hpp"
 #include <string>
 
 namespace GorillaUI::KeyExtension

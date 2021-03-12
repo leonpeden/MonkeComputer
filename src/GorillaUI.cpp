@@ -27,7 +27,6 @@ namespace GorillaUI
 
         Components::View* result = *il2cpp_utils::RunGenericMethod<Components::View*>(go, "AddComponent", std::vector<Il2CppClass*>{klass});
         result->activatedBefore = false;
-
         return result;
     }
 }

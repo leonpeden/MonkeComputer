@@ -18,7 +18,6 @@ namespace GorillaUI
         if (firstActivation)
         {
             
-            getLogger().info("Main View Manager says hello!");
         }
     }
 
@@ -32,7 +31,6 @@ namespace GorillaUI
         {
             if (activeView) 
             {
-                getLogger().info("ran onkeypressed on view");
                 il2cpp_utils::RunMethod(activeView, "OnKeyPressed", key);
             }
             else getLogger().error("No active view found");
@@ -50,12 +48,5 @@ namespace GorillaUI
         {
             ReplaceTopView(mainView);
         }
-        
     }
-    /*
-    void MainViewManager::DidDeactivate()
-    {
-        getLogger().info("MainViewManager DidDeactivate was called");
-    }
-    */
 }

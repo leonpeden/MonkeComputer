@@ -10,6 +10,7 @@ DECLARE_CLASS(GorillaUI::Components, View, "UnityEngine", "MonoBehaviour", sizeo
         
     public:
         std::string text = "";
+        
     REGISTER_FUNCTION(View,
         REGISTER_METHOD(Activate);
         REGISTER_METHOD(Deactivate);

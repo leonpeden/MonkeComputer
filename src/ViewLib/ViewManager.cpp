@@ -11,17 +11,9 @@ namespace GorillaUI::Components
 {
     void ViewManager::Activate()
     {
-        #warning issues with DidActivate when it does not exist F
-        /*auto* method = il2cpp_utils::FindMethodUnsafe((Il2CppObject*)this, "DidActivate", 1);
-        if (method) 
-        {
-            getLogger().info("DidActivate was found!");
-            il2cpp_utils::RunMethod(this, method, !activatedBefore);
-        }*/
+        il2cpp_utils::RunMethod(this, "DidActivate", !activatedBefore);
         if (activeView)
-        {
             activeView->Activate();
-        } 
         activatedBefore = true;
     }
 
@@ -41,7 +33,7 @@ namespace GorillaUI::Components
 
         activeView->Deactivate();
         manager->Activate();
-        CustomComputer::instance->activeViewManager = this;
+        CustomComputer::instance->activeViewManager = manager;
     }
 
     void ViewManager::DismissViewManager(GorillaUI::Components::ViewManager* manager)
@@ -51,6 +43,7 @@ namespace GorillaUI::Components
         manager->Deactivate();
         activeView->Activate();
         CustomComputer::instance->activeViewManager = this;
+        CustomComputer::Redraw();
     }
 
     void ViewManager::ReplaceTopView(GorillaUI::Components::View* view)

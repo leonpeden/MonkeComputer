@@ -2,10 +2,7 @@
 
 namespace GorillaUI
 {
-    UISelectionHandler::UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect) : _upKey(upKey), _downKey(downKey), _selectKey(selectKey), _canSelect(canSelect)
-    {
-
-    }
+    UISelectionHandler::UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect) : _upKey(upKey), _downKey(downKey), _selectKey(selectKey), _canSelect(canSelect) {};
 
     bool UISelectionHandler::HandleKeyPress(GorillaUI::EKeyboardKey key)
     {

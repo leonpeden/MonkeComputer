@@ -10,6 +10,16 @@
 #include "GorillaUI.hpp"
 #include "GorillaUI/MainView.hpp"
 #include "GorillaUI/MainViewManager.hpp"
+#include "GorillaUI/ModSettingsView/ModSettingsView.hpp"
+#include "GorillaUI/ModSettingsView/ModSettingsViewManager.hpp"
+
+#include "GorillaUI/BaseGameViews/BaseGameViewManager.hpp"
+#include "GorillaUI/BaseGameViews/BaseGameView.hpp"
+#include "GorillaUI/BaseGameViews/ColorChangeView.hpp"
+#include "GorillaUI/BaseGameViews/CustomRoomView.hpp"
+#include "GorillaUI/BaseGameViews/TurnChangeView.hpp"
+#include "GorillaUI/BaseGameViews/NameChangeView.hpp"
+
 #include "Test/TestView.hpp"
 
 #include "ViewLib/CustomComputer.hpp"
@@ -62,12 +72,16 @@ extern "C" void load()
     
     using namespace GorillaUI::Components;
     custom_types::Register::RegisterTypes<View, ViewManager>();
+    custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
     custom_types::Register::RegisterType<TestView>();
     custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
 
+    custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView>();
+    custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
-    GorillaUI::Register::RegisterModView<TestView*>("TestView", "1.0.0");
-    GorillaUI::Register::RegisterModView<TestView*>("TestView2", "1.0.0");
+
+    GorillaUI::Register::RegisterView<TestView*>("TestView", "1.0.0");
+    GorillaUI::Register::RegisterView<TestView*>("TestView2", "1.0.0");
     INFO("Mod Loaded!");
 }

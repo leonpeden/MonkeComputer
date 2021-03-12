@@ -7,38 +7,42 @@ DEFINE_CLASS(GorillaUI::MainView);
 
 extern Logger& getLogger();
 
+#define MENU_OPTIONS 2
+
 namespace GorillaUI
 {
     void MainView::Awake()
     {
         selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = Register::get_entries().size() - 1;
-        textInputHandler = new UITextInputHandler();
+        selectionHandler->max = MENU_OPTIONS - 1;
     }
 
     void MainView::DidActivate(bool firstActivation)
     {
-        std::function<void(int)> fun = std::bind(&MainView::ShowModView, this, std::placeholders::_1);
+        std::function<void(int)> fun = std::bind(&MainView::ShowView, this, std::placeholders::_1);
         selectionHandler->selectionCallback = fun;
         
         if (firstActivation)
         {
             Redraw();
-
         }
     }
 
-    void MainView::DidDeactivate()
+    void MainView::ShowView(int index)
     {
-        getLogger().info("main View Was Deactivated!");
-    }
-
-    void MainView::ShowModView(int index)
-    {
-        std::vector<ModEntry>& entries = Register::get_entries();
-        if (entries.size() == 0) return;
-        ModEntry& entry = entries[selectionHandler->currentSelectionIndex];
-        CustomComputer::instance->activeViewManager->ReplaceTopView(entry.get_view());
+        switch(index)
+        {
+            case 0:
+                if (!modSettingsViewManager) modSettingsViewManager = CreateViewManager<ModSettingsViewManager*>();
+                CustomComputer::instance->activeViewManager->PresentViewManager(modSettingsViewManager);
+                break;
+            case 1:
+                if (!baseGameViewManager) baseGameViewManager = CreateViewManager<BaseGameViewManager*>();
+                CustomComputer::instance->activeViewManager->PresentViewManager(baseGameViewManager);
+            default:
+                getLogger().error("Selected view was out of range"); 
+                break;
+        }
     }
 
     void MainView::Redraw()
@@ -46,12 +50,9 @@ namespace GorillaUI
         text = "";
 
         DrawHeader();
-        DrawMods();
+        DrawSubMenus();
 
-        text += textInputHandler->text;
-        text += "\n";
-
-        CustomComputer::instance->Redraw();
+        CustomComputer::Redraw();
     }
     
     void MainView::DrawHeader()
@@ -62,23 +63,28 @@ namespace GorillaUI
         text += "<color=#ffff00>===========================================</color>\n";
     }
     
-    void MainView::DrawMods()
+    void MainView::DrawSubMenus()
     {
-        const std::vector<ModEntry>& entries = Register::get_entries();
-        int i = 0;
-        for (auto& e : entries)
+        for (int i = 0; i < MENU_OPTIONS; i++)
         {
             text += selectionHandler->currentSelectionIndex == i ? "<color=#ed6540>></color> " : "  ";
-            text += e.get_info().id;
+            switch(i)
+            {
+                case 0:
+                    text += "Mod Settings";
+                    break;
+                case 1:
+                    text += "Base Game Settings";
+                default:
+                    break;
+            }
             text += "\n";
-            i++;
         }
     }
     
     void MainView::OnKeyPressed(int key)
     {
         selectionHandler->HandleKeyPress((EKeyboardKey)key);
-        textInputHandler->HandleKey((EKeyboardKey)key);
         Redraw();
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "beatsaber-hook/shared/utils/typedefs.h"
-#include "typedefs.h"
+#include "../typedefs.h"
 
 namespace GorillaUI
 {

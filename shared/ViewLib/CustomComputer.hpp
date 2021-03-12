@@ -3,14 +3,14 @@
 #include <map>
 
 #include "custom-types/shared/macros.hpp"
-#include "EKeyboardKey.hpp"
+#include "../EKeyboardKey.hpp"
 
-#include "ViewLib/CustomScreenInfo.hpp"
-#include "ViewLib/GorillaKeyboardButton.hpp"
-#include "ViewLib/ViewManager.hpp"
-#include "ViewLib/View.hpp"
+#include "../ViewLib/CustomScreenInfo.hpp"
+#include "../ViewLib/GorillaKeyboardButton.hpp"
+#include "../ViewLib/ViewManager.hpp"
+#include "../ViewLib/View.hpp"
 
-#include "typedefs.h"
+#include "../typedefs.h"
 
 namespace GorillaUI::Components {
     class GorillaKeyboardButton;

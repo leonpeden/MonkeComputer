@@ -8,6 +8,8 @@ extern Logger& getLogger();
 
 namespace GorillaUI
 {
+    UITextInputHandler::UITextInputHandler(GorillaUI::EKeyboardKey selectKey, bool canSelect) : _selectKey(selectKey), _canSelect(canSelect) {};
+
     bool UITextInputHandler::HandleKey(EKeyboardKey key)
     {
         if (key == EKeyboardKey::Delete)
@@ -22,10 +24,17 @@ namespace GorillaUI
             return true;
         }
 
+        if (key == _selectKey && _canSelect)
+        {
+            textCallback(text);
+            return true;
+        }
+
         if (IsFunctionKey(key)) 
         {
             return false;
         }
+        
         TypeChar(key);
         return true;
     }

@@ -3,21 +3,39 @@
 
 namespace GorillaUI
 {
-    ModEntry::ModEntry(ModInfo info, Il2CppClass* entryView) : info(info), entryView(entryView) { view = nullptr; };
+    ModEntry::ModEntry(ModInfo info, Il2CppClass* klass, EntryType type) : info(info), klass(klass), type(type) 
+    { 
+        view = nullptr; 
+        viewManager = nullptr;
+    }
 
     const ModInfo& ModEntry::get_info() const
     {
         return info;
     }
 
-    Il2CppClass* ModEntry::get_viewClass() const
+    Il2CppClass* ModEntry::get_class() const
     {
-        return entryView;
+        return klass;
     }
     
     Components::View* ModEntry::get_view()
     {
-        if (!view) view = CreateView(entryView);
+        if (type != EntryType::View) return nullptr;
+        if (!view) view = CreateView(klass);
         return view;
     }
+
+    Components::ViewManager* ModEntry::get_viewManager()
+    {
+        if (type != EntryType::ViewManager) return nullptr;
+        if (!viewManager) viewManager = CreateViewManager(klass);
+        return viewManager;
+    }
+
+    ModEntry::EntryType ModEntry::get_type()
+    {
+        return type;
+    }
+
 }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "custom-types/shared/macros.hpp"
-#include "ViewLib/CustomComputer.hpp"
-#include "EKeyboardKey.hpp"
-#include "typedefs.h"
+#include "../ViewLib/CustomComputer.hpp"
+#include "../EKeyboardKey.hpp"
+#include "../typedefs.h"
 
 namespace GorillaUI::Components
 {
