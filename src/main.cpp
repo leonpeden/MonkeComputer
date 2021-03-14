@@ -20,6 +20,9 @@
 #include "GorillaUI/BaseGameViews/CustomRoomView.hpp"
 #include "GorillaUI/BaseGameViews/TurnChangeView.hpp"
 #include "GorillaUI/BaseGameViews/NameChangeView.hpp"
+#include "GorillaUI/BaseGameViews/QueueChangeView.hpp"
+#include "GorillaUI/BaseGameViews/MicChangeView.hpp"
+#include "GorillaUI/BaseGameViews/GroupChangeView.hpp"
 
 #include "MonkeComputerConfigView.hpp"
 
@@ -46,8 +49,6 @@ Logger& getLogger()
 #define ERROR(value...) getLogger().error(value)
 #define run(value...) CRASH_UNLESS(il2cpp_utils::RunMethod(value))
 
-std::string dataDir = "";
-
 MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, Il2CppObject* self)
 {
     GorillaComputer_Start(self);
@@ -71,6 +72,7 @@ extern "C" void load()
     INFO("Loading mod...");
     if (!LoadConfig())
             SaveConfig();
+            
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     
     using namespace GorillaUI::Components;
@@ -79,7 +81,7 @@ extern "C" void load()
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
     custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
 
-    custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView>();
+    custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
     custom_types::Register::RegisterType<MonkeComputerConfigView>();

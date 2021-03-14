@@ -16,6 +16,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
     DECLARE_METHOD(void, DrawHeader);
     DECLARE_METHOD(void, DrawSubMenus);
     DECLARE_METHOD(void, OnKeyPressed, int key);
+    DECLARE_INSTANCE_FIELD(bool, screenSaver);
 
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
@@ -31,5 +32,6 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
         REGISTER_METHOD(DrawHeader);
         REGISTER_METHOD(DrawSubMenus);
         REGISTER_METHOD(OnKeyPressed);
+        REGISTER_FIELD(screenSaver);
     )
 )

@@ -45,7 +45,7 @@ namespace GorillaUI
     
     void NameChangeView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Name Config</color> ==</color>\n";
+        text += "<color=#ffff00>== <color=#fdfdfd>Settings/Name</color> ==</color>\n";
     }
     
     void NameChangeView::DrawName()

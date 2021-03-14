@@ -73,7 +73,7 @@ namespace GorillaUI
     
     void TurnChangeView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Turn Config</color> ==</color>\n";
+        text += "<color=#ffff00>== <color=#fdfdfd>Settings/Turn</color> ==</color>\n";
     }
     
     void TurnChangeView::DrawTurn()

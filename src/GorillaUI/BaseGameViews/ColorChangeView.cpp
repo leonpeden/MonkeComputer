@@ -63,7 +63,7 @@ namespace GorillaUI
     
     void ColorChangeView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Color Config</color> ==</color>\n";
+        text += "<color=#ffff00>== <color=#fdfdfd>Settings/Color</color> ==</color>\n";
     }
     
     void ColorChangeView::DrawColors()

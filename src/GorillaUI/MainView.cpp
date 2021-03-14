@@ -15,6 +15,7 @@ namespace GorillaUI
     {
         selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
         selectionHandler->max = MENU_OPTIONS;
+        screenSaver = true;
     }
 
     void MainView::DidActivate(bool firstActivation)
@@ -22,10 +23,8 @@ namespace GorillaUI
         std::function<void(int)> fun = std::bind(&MainView::ShowView, this, std::placeholders::_1);
         selectionHandler->selectionCallback = fun;
         
-        if (firstActivation)
-        {
+        if (!firstActivation)
             Redraw();
-        }
     }
 
     void MainView::ShowView(int index)
@@ -64,7 +63,7 @@ namespace GorillaUI
     {
         text += "<color=#ffff00>===========================================</color>\n";
         text += "               <color=#00ff00>MonkeComputer</color>\n";
-        text += "             <color=#ff0000>RedBrumbler</color> <color=#8800dd>Quest</color>\n";
+        text += "              by: <color=#ff0000>RedBrumbler</color>\n";
         text += "<color=#ffff00>===========================================</color>\n";
     }
     
@@ -81,7 +80,11 @@ namespace GorillaUI
     
     void MainView::OnKeyPressed(int key)
     {
-        selectionHandler->HandleKey((EKeyboardKey)key);
+        if (!screenSaver)
+        {
+            selectionHandler->HandleKey((EKeyboardKey)key);
+        }
+        else screenSaver = false;
         Redraw();
     }
 }

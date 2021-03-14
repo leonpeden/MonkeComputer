@@ -32,6 +32,7 @@ namespace GorillaUI
     void DetailView::DrawDetails()
     {
         text += "<size=40>  Refresh by reopening this menu\n</size>\n";
+        text += " Current Game Version: <color=#fdfdfd>" + BaseGameInterface::get_gameVersion() + "</color>\n";
         text += " Current Name: <color=#fdfdfd>" + BaseGameInterface::Name::get_name() + "</color>\n\n";
 
         char playerCount = BaseGameInterface::Room::get_playerCount();

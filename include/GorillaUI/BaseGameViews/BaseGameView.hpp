@@ -16,9 +16,13 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameView, GorillaUI::Components::View,
     DECLARE_INSTANCE_FIELD(Components::View*, nameChangeView);
     DECLARE_INSTANCE_FIELD(Components::View*, colorChangeView);
     DECLARE_INSTANCE_FIELD(Components::View*, turnChangeView);
+    DECLARE_INSTANCE_FIELD(Components::View*, micChangeView);
+    DECLARE_INSTANCE_FIELD(Components::View*, groupChangeView);
+    DECLARE_INSTANCE_FIELD(Components::View*, queueChangeView);
 
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
+        bool old = true;
     
     REGISTER_FUNCTION(BaseGameView,
         REGISTER_METHOD(Awake);
@@ -32,5 +36,9 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameView, GorillaUI::Components::View,
         REGISTER_FIELD(nameChangeView);
         REGISTER_FIELD(colorChangeView);
         REGISTER_FIELD(turnChangeView);
+        REGISTER_FIELD(micChangeView);
+        REGISTER_FIELD(groupChangeView);
+        REGISTER_FIELD(queueChangeView);
+
     )
 )

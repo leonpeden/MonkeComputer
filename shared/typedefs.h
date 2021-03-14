@@ -1,5 +1,6 @@
 #pragma once
 #include "beatsaber-hook/shared/utils/il2cpp-type-check.hpp"
+#include "beatsaber-hook/shared/utils/typedefs.h"
 
 // UnityEngine.Color
 typedef struct Color {
@@ -58,3 +59,4 @@ DEFINE_IL2CPP_ARG_TYPE(Vector4, "UnityEngine", "Vector4");
 DEFINE_IL2CPP_ARG_TYPE(Quaternion, "UnityEngine", "Quaternion");
 DEFINE_IL2CPP_ARG_TYPE(Rect, "UnityEngine", "Rect");
 DEFINE_IL2CPP_ARG_TYPE(Scene, "UnityEngine.SceneManagement", "Scene");
+DEFINE_IL2CPP_ARG_TYPE_GENERIC_CLASS(List, "System.Collections.Generic", "List`1");

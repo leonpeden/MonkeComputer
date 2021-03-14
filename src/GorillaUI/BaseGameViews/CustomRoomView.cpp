@@ -60,7 +60,7 @@ namespace GorillaUI
     
     void CustomRoomView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Room Config</color> ==</color>\n";
+        text += "<color=#ffff00>== <color=#fdfdfd>Settings/Room</color> ==</color>\n";
     }
     
     void CustomRoomView::DrawCode()

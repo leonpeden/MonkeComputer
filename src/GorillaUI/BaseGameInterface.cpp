@@ -1,6 +1,8 @@
 #include "GorillaUI/BaseGameInterface.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "beatsaber-hook/shared/utils/utils.h"
+#include <vector>
+#include <algorithm>
 
 extern Logger& getLogger();
 
@@ -209,6 +211,107 @@ namespace GorillaUI::BaseGameInterface
         InitTurnState();
     }
 
+    std::string get_gameVersion()
+    {
+        Il2CppObject* photonNetworkController = *il2cpp_utils::GetFieldValue("", "PhotonNetworkController", "instance");
+        Il2CppString* gameVersion = *il2cpp_utils::GetFieldValue<Il2CppString*>(photonNetworkController, "gameVersion");
+        return to_utf8(csstrtostr(gameVersion));
+    }
+
+    void SetpttType(std::string pttType)
+    {
+        Il2CppString* pttTypeCS = il2cpp_utils::createcsstr(pttType);
+        Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
+        il2cpp_utils::SetFieldValue(gorillaComputer, "pttType", pttTypeCS);
+
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "SetString", il2cpp_utils::createcsstr("pttType"), pttTypeCS);
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "Save");
+    }
+
+    void SetQueue(std::string queue)
+    {
+        Il2CppString* queueCS = il2cpp_utils::createcsstr(queue);
+        Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
+        il2cpp_utils::SetFieldValue(gorillaComputer, "currentQueue", queueCS);
+
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "SetString", il2cpp_utils::createcsstr("currentQueue"), queueCS);
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "Save");
+    }
+
+    void SetGroup(std::string group)
+    {
+        Il2CppString* groupMapJoin = il2cpp_utils::createcsstr(group);
+        Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
+        il2cpp_utils::SetFieldValue(gorillaComputer, "groupMapJoin", groupMapJoin);
+
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "SetString", il2cpp_utils::createcsstr("groupMapJoin"), groupMapJoin);
+        il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "Save");
+
+        bool inRoom = *il2cpp_utils::RunMethod<bool>("Photon.Pun", "PhotonNetwork", "get_InRoom");
+        
+        Il2CppObject* currentRoom = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_CurrentRoom");
+        bool isVisible = *il2cpp_utils::RunMethod<bool>(currentRoom, "get_IsVisible");
+
+        bool flag = inRoom && !isVisible && (group == "FOREST" || group == "CAVE");
+
+		if (flag)
+		{
+            Il2CppObject* networkController = *il2cpp_utils::GetFieldValue(gorillaComputer, "networkController");
+            il2cpp_utils::SetFieldValue(networkController, "joinWithFriends", true);
+
+            Il2CppObject* friendJoinCollider = *il2cpp_utils::GetFieldValue(gorillaComputer, "friendJoinCollider");
+            List<Il2CppString*>* playerIDsCurrentlyTouching = *il2cpp_utils::GetFieldValue<List<Il2CppString*>*>(friendJoinCollider, "playerIDsCurrentlyTouching");
+            std::vector<std::string> playerIDsCurrentlyTouchingVector = {};
+
+            for (int i = 0; i < playerIDsCurrentlyTouching->size; i++)
+            {
+                Il2CppString* playerIDcs = playerIDsCurrentlyTouching->items->values[i];
+                if (!playerIDcs) continue;
+                std::string playerID = to_utf8(csstrtostr(playerIDcs));
+                playerIDsCurrentlyTouchingVector.push_back(playerID);
+            }
+            
+            il2cpp_utils::SetFieldValue(networkController, "friendIDList", playerIDsCurrentlyTouching);
+            static Il2CppString* empty = il2cpp_utils::createcsstr("", il2cpp_utils::StringType::Manual);
+            il2cpp_utils::SetFieldValue(networkController, "currentGameType", empty);
+
+            Array<Il2CppObject*>* playerList = *il2cpp_utils::RunMethod<Array<Il2CppObject*>*>("Photon.Pun", "PhotonNetwork", "get_PlayerList");
+
+            Il2CppObject* localPlayer = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_LocalPlayer");
+            Il2CppObject* gorillaTagManager = *il2cpp_utils::GetFieldValue("", "GorillaTagManager", "instance");
+            Il2CppObject* photonView = *il2cpp_utils::RunMethod(gorillaTagManager, "get_photonView");
+
+            for (int i = 0; i < playerList->Length(); i++)
+            {
+                Il2CppObject* roomPlayer = playerList->values[i];
+                Il2CppString* userIDCS = *il2cpp_utils::RunMethod<Il2CppString*>(roomPlayer, "get_UserId");
+                std::string userID = to_utf8(csstrtostr(userIDCS));
+                std::vector<std::string>::iterator it = std::find(playerIDsCurrentlyTouchingVector.begin(), playerIDsCurrentlyTouchingVector.end(), userID);
+
+                if (it != playerIDsCurrentlyTouchingVector.end() && roomPlayer != localPlayer)
+                {
+                    static Il2CppString* joinPubWithFriends = il2cpp_utils::createcsstr("JoinPubWithFreinds", il2cpp_utils::StringType::Manual);
+                    static std::vector<Il2CppClass*> klass = {classof(Il2CppObject*)};
+                    Array<Il2CppObject*>* emptyArray = *il2cpp_utils::RunGenericMethod<Array<Il2CppObject*>*>("System", "Array", "Empty", klass);
+                    il2cpp_utils::RunMethod(photonView, "RPC", joinPubWithFriends, roomPlayer, emptyArray);
+                }
+            }
+            il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "SendAllOutgoingCommands");
+
+			if (group == "FOREST")
+			{
+				Il2CppObject* forestMapTrigger = *il2cpp_utils::GetFieldValue(gorillaComputer, "forestMapTrigger");
+                il2cpp_utils::RunMethod(forestMapTrigger, "ComputerJoin");
+			}
+			else if (group == "CAVE")
+			{
+				Il2CppObject* caveMapTrigger = *il2cpp_utils::GetFieldValue(gorillaComputer, "caveMapTrigger");
+                il2cpp_utils::RunMethod(caveMapTrigger, "ComputerJoin");
+			}
+		}
+    }
+
+
     namespace SnapTurn
     {
         int get_turnValue()
@@ -294,6 +397,63 @@ namespace GorillaUI::BaseGameInterface
             Il2CppObject* currentRoom = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_CurrentRoom");
             if (!currentRoom) return 0;
             return *il2cpp_utils::RunMethod<char>(currentRoom, "get_PlayerCount");
+        }
+
+        int get_collidingPlayers()
+        {
+            Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
+            Il2CppObject* friendJoinCollider = *il2cpp_utils::GetFieldValue(gorillaComputer, "friendJoinCollider");
+            List<Il2CppString*>* playerIDsCurrentlyTouching = *il2cpp_utils::GetFieldValue<List<Il2CppString*>*>(friendJoinCollider, "playerIDsCurrentlyTouching");
+            return playerIDsCurrentlyTouching->size;
+        }
+    }
+
+    namespace Mic
+    {
+        std::string get_pttType()
+        {
+            Il2CppString* defaultType = il2cpp_utils::createcsstr("ALL CHAT");
+            Il2CppString* pttType = *il2cpp_utils::RunMethod<Il2CppString*>("UnityEngine", "PlayerPrefs", "GetString", il2cpp_utils::createcsstr("pttType"), defaultType);
+            return to_utf8(csstrtostr(pttType));
+        }
+
+        int pttTypeToIndex(std::string pttType)
+        {
+            if (pttType == "PUSH TO MUTE") return 2;
+            else if (pttType == "PUSH TO TALK") return 1;
+            else return 0;
+        }
+    }
+
+    namespace Queue
+    {
+        std::string get_Queue()
+        {
+            Il2CppString* defaultType = il2cpp_utils::createcsstr("DEFAULT");
+            Il2CppString* currentQueue = *il2cpp_utils::RunMethod<Il2CppString*>("UnityEngine", "PlayerPrefs", "GetString", il2cpp_utils::createcsstr("currentQueue"), defaultType);
+            return to_utf8(csstrtostr(currentQueue));
+        }
+
+        int queueToIndex(std::string queue)
+        {
+            if (queue == "COMPETETIVE") return 1;
+            else return 0;
+        }
+    }
+
+    namespace Group
+    {
+        std::string get_group()
+        {
+            Il2CppString* defaultType = il2cpp_utils::createcsstr("FOREST");
+            Il2CppString* currentGroup = *il2cpp_utils::RunMethod<Il2CppString*>("UnityEngine", "PlayerPrefs", "GetString", il2cpp_utils::createcsstr("groupMapJoin"), defaultType);
+            return to_utf8(csstrtostr(currentGroup));
+        }
+
+        int groupToIndex(std::string group)
+        {
+            if (group == "CAVE") return 1;
+            else return 0;
         }
     }
 }

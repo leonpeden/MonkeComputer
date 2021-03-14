@@ -25,7 +25,6 @@ namespace GorillaUI
         gorillaComputer = *il2cpp_utils::RunGenericMethod(this, "GetComponent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaComputer")});
         il2cpp_utils::RunMethod(gorillaComputer, "set_enabled", false);
 
-        //il2cpp_utils::SetFieldValue(gorillaComputer, "instance", gorillaComputer);
 
         Il2CppObject* transform = *il2cpp_utils::RunMethod(gorillaComputer, "get_transform");
         Il2CppObject* keyboardTransform = *il2cpp_utils::RunMethod(transform, "Find", il2cpp_utils::createcsstr("keyboard"));
@@ -34,12 +33,11 @@ namespace GorillaUI
         std::vector<Il2CppClass*> klass = {il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")};
         Il2CppObject* meshRenderer = *il2cpp_utils::RunGenericMethod(keyboardGO, "GetComponent", klass);
         Il2CppObject* material = *il2cpp_utils::RunMethod(meshRenderer, "get_material");
-        Color kbColor = {0.5f, 0.5f, 0.5f};
+        Color kbColor = {0.0f, 0.0f, 0.0f};
         
         il2cpp_utils::RunMethod(material, "set_color", kbColor);
         ReplaceKeys(); 
         screenInfo = CreateMonitor();
-        Redraw();
     }
 
     void CustomComputer::Redraw()

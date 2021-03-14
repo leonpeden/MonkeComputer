@@ -6,7 +6,12 @@
 #include "GorillaUI/BaseGameViews/NameChangeView.hpp"
 #include "GorillaUI/BaseGameViews/TurnChangeView.hpp"
 #include "GorillaUI/BaseGameViews/CustomRoomView.hpp"
+#include "GorillaUI/BaseGameViews/GroupChangeView.hpp"
+#include "GorillaUI/BaseGameViews/MicChangeView.hpp"
+#include "GorillaUI/BaseGameViews/QueueChangeView.hpp"
 #include "Helpers/SelectionHelper.hpp"
+#include "GorillaUI/BaseGameInterface.hpp"
+
 DEFINE_CLASS(GorillaUI::BaseGameView);
 
 extern Logger& getLogger();
@@ -15,13 +20,19 @@ namespace GorillaUI
 {
     void BaseGameView::Awake()
     {
-        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = 4;
-
         customRoomView = nullptr;
         nameChangeView = nullptr;
         colorChangeView = nullptr;
         turnChangeView = nullptr;
+        micChangeView = nullptr;
+        groupChangeView = nullptr;
+        queueChangeView = nullptr;
+
+        std::string gameVer = BaseGameInterface::get_gameVersion();
+        if (gameVer == "live102") old = true; 
+    	else if (gameVer == "live101") old = true;
+        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
+        selectionHandler->max = old ? 4 : 7;
     }
 
     void BaseGameView::DidActivate(bool firstActivation)
@@ -55,6 +66,18 @@ namespace GorillaUI
                 if (!turnChangeView) turnChangeView = CreateView<TurnChangeView*>();
                 CustomComputer::instance->activeViewManager->ReplaceTopView(turnChangeView);
                 break;
+            case 4:
+                if (!micChangeView) micChangeView = CreateView<MicChangeView*>();
+                CustomComputer::instance->activeViewManager->ReplaceTopView(micChangeView);
+                break;
+            case 5:
+                if (!groupChangeView) groupChangeView = CreateView<GroupChangeView*>();
+                CustomComputer::instance->activeViewManager->ReplaceTopView(groupChangeView);
+                break;
+            case 6:
+                if (!queueChangeView) queueChangeView = CreateView<QueueChangeView*>();
+                CustomComputer::instance->activeViewManager->ReplaceTopView(queueChangeView);
+                break;
             default:
                 break;
         }
@@ -72,7 +95,8 @@ namespace GorillaUI
     
     void BaseGameView::DrawHeader()
     {
-        text += "<color=#ffff00>== <color=#fdfdfd>Gorilla Tag Settings</color> ==</color>\n";
+        std::string gameVer = BaseGameInterface::get_gameVersion();
+        text += string_format("<color=#ffff00>== <color=#fdfdfd>Settings</color> ==</color>\n", gameVer.c_str());
     }
     
     void BaseGameView::DrawViews()
@@ -85,6 +109,13 @@ namespace GorillaUI
                 "Color Config",
                 "Turn Config"
         };
+
+        if (!old)
+        {
+            views.push_back("Mic Config");
+            views.push_back("Group Config");
+            views.push_back("Queue Config");
+        }
 
         SelectionHelper::DrawSelection(views, selectionHandler->currentSelectionIndex, text);
     }
