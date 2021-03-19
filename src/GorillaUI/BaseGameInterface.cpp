@@ -359,8 +359,9 @@ namespace GorillaUI::BaseGameInterface
     {
         std::string get_name()
         {
-            Il2CppString* csName = *il2cpp_utils::RunMethod<Il2CppString*>("UnityEngine", "PlayerPrefs", "GetString", il2cpp_utils::createcsstr("playerName"), il2cpp_utils::createcsstr(string_format("gorilla%d", rand() % 10000)));
-            return to_utf8(csstrtostr(csName));
+            Il2CppString* csMonke = *il2cpp_utils::RunMethod<Il2CppString*>("UnityEngine", "PlayerPrefs", "GetString", il2cpp_utils::createcsstr("playerName"), il2cpp_utils::createcsstr(string_format("gorilla%d", rand() % 10000)));
+            std::string monke = to_utf8(csstrtostr(csMonke));
+            return monke;
         }
     }
 

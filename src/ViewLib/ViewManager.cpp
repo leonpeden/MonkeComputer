@@ -2,6 +2,8 @@
 #include "KeyExtension.hpp"
 #include "typedefs.h"
 #include "ViewLib/CustomComputer.hpp"
+#include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
+#include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 
 DEFINE_CLASS(GorillaUI::Components::ViewManager);
 
@@ -11,7 +13,12 @@ namespace GorillaUI::Components
 {
     void ViewManager::Activate()
     {
-        il2cpp_utils::RunMethod(this, "DidActivate", !activatedBefore);
+        auto* didActivate = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass (this), "DidActivate", 1);
+        if (didActivate)
+            il2cpp_utils::RunMethod(this, didActivate, !activatedBefore);
+
+
+        //il2cpp_utils::RunMethod(this, "DidActivate", !activatedBefore);
         if (activeView)
             activeView->Activate();
         activatedBefore = true;
@@ -19,7 +26,11 @@ namespace GorillaUI::Components
 
     void ViewManager::Deactivate()
     {
-        il2cpp_utils::RunMethod(this, "DidDeactivate");
+        //il2cpp_utils::RunMethod(this, "DidDeactivate");
+
+        auto* didDeactivate = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass (this), "DidDeactivate", 0);
+        if (didDeactivate)
+            il2cpp_utils::RunMethod(this, didDeactivate);
     }
    
     void ViewManager::PresentViewManager(GorillaUI::Components::ViewManager* manager)
@@ -30,7 +41,7 @@ namespace GorillaUI::Components
         
         activeView->Deactivate();
         manager->Activate();
-        CustomComputer::instance->activeViewManager = manager;
+        CustomComputer::get_instance()->activeViewManager = manager;
     }
 
     void ViewManager::DismissViewManager(GorillaUI::Components::ViewManager* manager)
@@ -39,7 +50,7 @@ namespace GorillaUI::Components
         manager->activeView->Deactivate();
         manager->Deactivate();
         activeView->Activate();
-        CustomComputer::instance->activeViewManager = this;
+        CustomComputer::get_instance()->activeViewManager = this;
         CustomComputer::Redraw();
     }
 
@@ -48,7 +59,7 @@ namespace GorillaUI::Components
         if (activeView) activeView->Deactivate();
         activeView = view;
         activeView->Activate();
-        CustomComputer::instance->Redraw();
+        CustomComputer::Redraw();
     }
 
     Il2CppObject* ViewManager::transform()

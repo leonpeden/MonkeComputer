@@ -35,10 +35,10 @@ namespace GorillaUI
         switch(entry.get_type())
         {
             case ModEntry::EntryType::View:
-                CustomComputer::instance->activeViewManager->ReplaceTopView(entry.get_view());
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(entry.get_view());
                 break;
             case ModEntry::EntryType::ViewManager:
-                CustomComputer::instance->activeViewManager->PresentViewManager(entry.get_viewManager());
+                CustomComputer::get_instance()->activeViewManager->PresentViewManager(entry.get_viewManager());
                 break;
             default:
                 return;

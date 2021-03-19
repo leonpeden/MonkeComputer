@@ -33,15 +33,15 @@ namespace GorillaUI
         {
             case 0:
                 if (!baseGameViewManager) baseGameViewManager = CreateViewManager<BaseGameViewManager*>();
-                CustomComputer::instance->activeViewManager->PresentViewManager(baseGameViewManager);
+                CustomComputer::get_instance()->activeViewManager->PresentViewManager(baseGameViewManager);
                 break;
             case 1:
                 if (!modSettingsViewManager) modSettingsViewManager = CreateViewManager<ModSettingsViewManager*>();
-                CustomComputer::instance->activeViewManager->PresentViewManager(modSettingsViewManager);
+                CustomComputer::get_instance()->activeViewManager->PresentViewManager(modSettingsViewManager);
                 break;
             case 2:
                 if (!detailView) detailView = CreateView<DetailView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(detailView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(detailView);
                 break;
             default:
                 getLogger().error("Selected view was out of range"); 

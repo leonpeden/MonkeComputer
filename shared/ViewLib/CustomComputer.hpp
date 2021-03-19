@@ -35,10 +35,12 @@ DECLARE_CLASS(GorillaUI, CustomComputer, "UnityEngine", "MonoBehaviour", sizeof(
 
         keymap keys;
         CustomScreenInfo screenInfo;
+        static inline GorillaUI::CustomComputer* instance = nullptr;
     public:
         GorillaUI::Components::ViewManager* activeViewManager = nullptr;
         void Init(GorillaUI::Components::View* initialView);
-        static inline GorillaUI::CustomComputer* instance = nullptr;
+
+        static CustomComputer* get_instance();
 
     REGISTER_FUNCTION(CustomComputer,
         REGISTER_METHOD(PressButton);

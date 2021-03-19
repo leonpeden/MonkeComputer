@@ -42,7 +42,7 @@ namespace GorillaUI
         float g = (float)numberInputHandlers[1]->number / 255.0f;
         float b = (float)numberInputHandlers[2]->number / 255.0f;
         
-        CustomComputer::instance->SetBG(r, g, b);
+        CustomComputer::get_instance()->SetBG(r, g, b);
     }
 
     void MonkeComputerConfigView::Redraw()

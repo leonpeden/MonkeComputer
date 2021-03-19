@@ -225,6 +225,17 @@ namespace GorillaUI
 
     void CustomComputer::PressButton(GorillaKeyboardButton* button)
     {
-        if (activeViewManager) il2cpp_utils::RunMethod(activeViewManager, "NotifyOfKeyPress", (int)button->key);
+        if (activeViewManager) 
+        {
+            auto* notifyOfKeyPress = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass (activeViewManager), "NotifyOfKeyPress", 1);
+            if (notifyOfKeyPress)
+                il2cpp_utils::RunMethod(activeViewManager, notifyOfKeyPress, (int)button->key);
+        }
     }
+
+    CustomComputer* CustomComputer::get_instance()
+    {
+        return instance;
+    }
+
 }

@@ -52,31 +52,31 @@ namespace GorillaUI
         {
             case 0:
                 if (!customRoomView) customRoomView = CreateView<CustomRoomView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(customRoomView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(customRoomView);
                 break;
             case 1:
                 if (!nameChangeView) nameChangeView = CreateView<NameChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(nameChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(nameChangeView);
                 break;
             case 2:
                 if (!colorChangeView) colorChangeView = CreateView<ColorChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(colorChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(colorChangeView);
                 break;
             case 3:
                 if (!turnChangeView) turnChangeView = CreateView<TurnChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(turnChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(turnChangeView);
                 break;
             case 4:
                 if (!micChangeView) micChangeView = CreateView<MicChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(micChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(micChangeView);
                 break;
             case 5:
                 if (!groupChangeView) groupChangeView = CreateView<GroupChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(groupChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(groupChangeView);
                 break;
             case 6:
                 if (!queueChangeView) queueChangeView = CreateView<QueueChangeView*>();
-                CustomComputer::instance->activeViewManager->ReplaceTopView(queueChangeView);
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(queueChangeView);
                 break;
             default:
                 break;

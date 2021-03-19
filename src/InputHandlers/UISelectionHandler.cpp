@@ -2,7 +2,7 @@
 
 namespace GorillaUI
 {
-    UISelectionHandler::UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect) : _upKey(upKey), _downKey(downKey), _selectKey(selectKey), _canSelect(canSelect) {};
+    UISelectionHandler::UISelectionHandler(GorillaUI::EKeyboardKey upKey, GorillaUI::EKeyboardKey downKey, GorillaUI::EKeyboardKey selectKey, bool canSelect, bool wrapAround) : _upKey(upKey), _downKey(downKey), _selectKey(selectKey), _canSelect(canSelect), _wrapAround(wrapAround) {};
 
     bool UISelectionHandler::HandleKey(GorillaUI::EKeyboardKey key)
     {
@@ -41,15 +41,24 @@ namespace GorillaUI
 
     void UISelectionHandler::ClampSelection()
     {
-        if (currentSelectionIndex >= max)
+        if (currentSelectionIndex >= max && !_wrapAround)
         {
             currentSelectionIndex = max - 1;
             return;
         }
-
-        if (currentSelectionIndex < min)
+        else if (currentSelectionIndex >= max)
         {
             currentSelectionIndex = min;
+            return;
+        }
+
+        if (currentSelectionIndex < min && !_wrapAround)
+        {
+            currentSelectionIndex = min;
+        }
+        else if (currentSelectionIndex < min)
+        {
+            currentSelectionIndex = max - 1;
         }
     }
 }
