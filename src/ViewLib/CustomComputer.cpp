@@ -18,8 +18,10 @@ namespace GorillaUI
     {
         instance = this;
         activeViewManager = *il2cpp_utils::New<GorillaUI::MainViewManager*>();
+        activeViewManager->computer = this;
         il2cpp_utils::SetFieldValue(activeViewManager, "mainView", initialView);
         activeViewManager->activeView = initialView;
+        initialView->computer = this;
         activeViewManager->Activate();
         
         gorillaComputer = *il2cpp_utils::RunGenericMethod(this, "GetComponent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaComputer")});

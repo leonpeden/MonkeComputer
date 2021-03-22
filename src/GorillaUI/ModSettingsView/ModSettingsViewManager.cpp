@@ -11,6 +11,7 @@ namespace GorillaUI
         if (firstActivation)
         {
             listView = CreateView<ModSettingsView*>();
+            listView->computer = computer;
             activeView = listView;
         }
     }

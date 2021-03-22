@@ -4,13 +4,17 @@
 #include "custom-types/shared/macros.hpp"
 #include <map> 
 
-namespace GorillaUI::Components 
+namespace GorillaUI
 {
-    class ViewManager; 
-    class View;
+    class CustomComputer;
+    namespace Components
+    {
+        class ViewManager; 
+        class View;
+    }
 }
 
-DECLARE_CLASS(GorillaUI::Components, ViewManager, "UnityEngine", "MonoBehaviour", sizeof(Il2CppObject) + sizeof(void*) * 3, 
+DECLARE_CLASS(GorillaUI::Components, ViewManager, "UnityEngine", "MonoBehaviour", sizeof(Il2CppObject) + sizeof(void*) * 4, 
     DECLARE_METHOD(void, Activate);
     DECLARE_METHOD(void, Deactivate);
     DECLARE_METHOD(void, PresentViewManager, GorillaUI::Components::ViewManager* manager);
@@ -26,7 +30,8 @@ DECLARE_CLASS(GorillaUI::Components, ViewManager, "UnityEngine", "MonoBehaviour"
     public:
         GorillaUI::Components::ViewManager* parentViewManager = nullptr;
         GorillaUI::Components::ViewManager* childViewManager = nullptr;
-
+        GorillaUI::CustomComputer* computer = nullptr;
+        
     REGISTER_FUNCTION(ViewManager,
         REGISTER_METHOD(Activate);
         REGISTER_METHOD(Deactivate);

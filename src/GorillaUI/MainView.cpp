@@ -3,18 +3,31 @@
 #include "Register.hpp"
 #include "ViewLib/CustomComputer.hpp"
 #include "Helpers/SelectionHelper.hpp"
+#include "Helpers/PageHelper.hpp"
 DEFINE_CLASS(GorillaUI::MainView);
 
 extern Logger& getLogger();
 
-#define MENU_OPTIONS 3
+#define MENU_PAGE_SIZE 5
 
 namespace GorillaUI
 {
     void MainView::Awake()
     {
-        selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = MENU_OPTIONS;
+        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
+        if (!pageSelectionHandler) pageSelectionHandler = new UISelectionHandler(EKeyboardKey::Left, EKeyboardKey::Right, EKeyboardKey::Enter, false, true);
+
+        selectionHandler->max = MENU_PAGE_SIZE;
+        std::vector<ModEntry>& mods = Register::get_entries();
+        entryCount = mods.size();
+        pageCount = PageHelper::GetPageAmount(mods, MENU_PAGE_SIZE);
+        pageSelectionHandler->max = pageCount;
+
+        if (entryCount < MENU_PAGE_SIZE)
+        {
+            selectionHandler->max = entryCount;
+        }
+
         screenSaver = true;
     }
 
@@ -29,23 +42,20 @@ namespace GorillaUI
 
     void MainView::ShowView(int index)
     {
-        switch(index)
+        index += (MENU_PAGE_SIZE * pageSelectionHandler->currentSelectionIndex);
+        if (entryCount == 0) return;
+
+        ModEntry& entry = Register::get_entry(index);
+        switch(entry.get_type())
         {
-            case 0:
-                if (!baseGameViewManager) baseGameViewManager = CreateViewManager<BaseGameViewManager*>();
-                CustomComputer::get_instance()->activeViewManager->PresentViewManager(baseGameViewManager);
+            case ModEntry::EntryType::View:
+                computer->activeViewManager->ReplaceTopView(entry.get_view());
                 break;
-            case 1:
-                if (!modSettingsViewManager) modSettingsViewManager = CreateViewManager<ModSettingsViewManager*>();
-                CustomComputer::get_instance()->activeViewManager->PresentViewManager(modSettingsViewManager);
-                break;
-            case 2:
-                if (!detailView) detailView = CreateView<DetailView*>();
-                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(detailView);
+            case ModEntry::EntryType::ViewManager:
+                computer->activeViewManager->PresentViewManager(entry.get_viewManager());
                 break;
             default:
-                getLogger().error("Selected view was out of range"); 
-                break;
+                return;
         }
     }
 
@@ -56,7 +66,13 @@ namespace GorillaUI
         DrawHeader();
         DrawSubMenus();
 
-        CustomComputer::Redraw();
+        if (pageCount > 1)
+        {
+            text += "\n";
+            text += string_format("  Page %d/%d", pageSelectionHandler->currentSelectionIndex, pageCount - 1);
+        }
+
+        computer->Redraw();
     }
     
     void MainView::DrawHeader()
@@ -69,20 +85,31 @@ namespace GorillaUI
     
     void MainView::DrawSubMenus()
     {
-        std::vector<std::string> options = {
-            "Game Settings",
-            "Mod Settings",
-            "Details"
-        };
+        std::vector<ModEntry> entries = PageHelper::GetPage(Register::get_entries(), MENU_PAGE_SIZE, pageSelectionHandler->currentSelectionIndex);
+        selectionHandler->max = entries.size();
+        selectionHandler->currentSelectionIndex = selectionHandler->currentSelectionIndex >= entries.size() ? entries.size() - 1 : selectionHandler->currentSelectionIndex;
+        std::vector<std::string> menuNames = {};
+        
+        for (auto e : entries)
+        {
+            menuNames.push_back(e.get_info().id);
+        }
 
-        SelectionHelper::DrawSelection(options, selectionHandler->currentSelectionIndex, text);
+        SelectionHelper::DrawSelection(menuNames, selectionHandler->currentSelectionIndex, text);
+
+        for (int i = entries.size(); i <= MENU_PAGE_SIZE; i++)
+        {
+            text +="\n"; 
+        }
     }
     
     void MainView::OnKeyPressed(int key)
     {
+        if (entryCount == 0) return;
         if (!screenSaver)
         {
             selectionHandler->HandleKey((EKeyboardKey)key);
+            pageSelectionHandler->HandleKey((EKeyboardKey)key);
         }
         else screenSaver = false;
         Redraw();

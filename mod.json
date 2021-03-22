@@ -3,9 +3,9 @@
     "name": "Monke Computer",
     "id": "MonkeComputer",
     "author": "RedBrumbler",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "packageId": "com.AnotherAxiom.GorillaTag",
-    "packageVersion": "1.0.1",
+    "packageVersion": "1.0.3",
     "type": "Gameplay",
     "modFiles": [
         "libmonkecomputer.so"

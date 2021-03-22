@@ -5,15 +5,10 @@
 #include "../EKeyboardKey.hpp"
 #include "../typedefs.h"
 
-namespace GorillaUI::Components
+namespace GorillaUI
 {
-    class ViewSystem;
+    class CustomComputer;   
 }
-
-namespace GorillaUI {
-    class CustomComputer;
-}
-
 DECLARE_CLASS(GorillaUI::Components, GorillaKeyboardButton, "", "GorillaTriggerBox", sizeof(Il2CppObject) + sizeof(void*) * 2 + sizeof(int) + sizeof(float) * 3,
     DECLARE_METHOD(void, OnTriggerEnter, Il2CppObject* collider);
     DECLARE_METHOD(void, OnTriggerExit, Il2CppObject* collider);

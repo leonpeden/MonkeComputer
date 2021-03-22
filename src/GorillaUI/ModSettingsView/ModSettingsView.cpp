@@ -2,43 +2,53 @@
 #include "GorillaUI.hpp"
 #include "Register.hpp"
 #include "ViewLib/CustomComputer.hpp"
+#include "Helpers/PageHelper.hpp"
+#include "Helpers/SelectionHelper.hpp"
 
 DEFINE_CLASS(GorillaUI::ModSettingsView);
 
 extern Logger& getLogger();
 
+#define SETTINGS_PAGE_SIZE 8
 namespace GorillaUI
 {
     void ModSettingsView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = Register::get_entries().size();
+        if (!pageSelectionHandler) pageSelectionHandler = new UISelectionHandler(EKeyboardKey::Left, EKeyboardKey::Right, EKeyboardKey::Enter, false, true);
+
+        selectionHandler->max = SETTINGS_PAGE_SIZE;
+        std::vector<ModEntry>& mods = Register::get_settingsEntries();
+        modCount = mods.size();
+        pageCount = PageHelper::GetPageAmount(mods, SETTINGS_PAGE_SIZE);
+        pageSelectionHandler->max = pageCount;
+
+        if (modCount < SETTINGS_PAGE_SIZE)
+        {
+            selectionHandler->max = modCount;
+        }
     }
 
     void ModSettingsView::DidActivate(bool firstActivation)
     {
         std::function<void(int)> fun = std::bind(&ModSettingsView::ShowModView, this, std::placeholders::_1);
         selectionHandler->selectionCallback = fun;
-        
-        if (firstActivation)
-        {
-            getLogger().info("ModSettings View First activation!");
-            Redraw();
-        }
+        Redraw();
     }
 
     void ModSettingsView::ShowModView(int index)
     {
-        std::vector<ModEntry>& entries = Register::get_entries();
-        if (entries.size() == 0) return;
-        ModEntry& entry = entries[selectionHandler->currentSelectionIndex];
+        index += (SETTINGS_PAGE_SIZE * pageSelectionHandler->currentSelectionIndex);
+        if (modCount == 0) return;
+
+        ModEntry& entry = Register::get_settingsEntry(index);
         switch(entry.get_type())
         {
             case ModEntry::EntryType::View:
-                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(entry.get_view());
+                computer->activeViewManager->ReplaceTopView(entry.get_view());
                 break;
             case ModEntry::EntryType::ViewManager:
-                CustomComputer::get_instance()->activeViewManager->PresentViewManager(entry.get_viewManager());
+                computer->activeViewManager->PresentViewManager(entry.get_viewManager());
                 break;
             default:
                 return;
@@ -62,20 +72,25 @@ namespace GorillaUI
     
     void ModSettingsView::DrawMods()
     {
-        const std::vector<ModEntry>& entries = Register::get_entries();
-        int i = 0;
-        for (auto& e : entries)
+        std::vector<ModEntry> entries = PageHelper::GetPage(Register::get_settingsEntries(), SETTINGS_PAGE_SIZE, pageSelectionHandler->currentSelectionIndex);
+        selectionHandler->max = entries.size();
+        selectionHandler->currentSelectionIndex = selectionHandler->currentSelectionIndex >= entries.size() ? entries.size() - 1 : selectionHandler->currentSelectionIndex;
+        std::vector<std::string> modNames = {};
+        
+        for (auto e : entries)
         {
-            text += selectionHandler->currentSelectionIndex == i ? "<color=#ed6540>></color> " : "  ";
-            text += e.get_info().id;
-            text += "\n";
-            i++;
+            modNames.push_back(e.get_info().id);
         }
+
+        SelectionHelper::DrawSelection(modNames, selectionHandler->currentSelectionIndex, text);
     }
     
     void ModSettingsView::OnKeyPressed(int key)
     {
+        if (modCount == 0) return;
         selectionHandler->HandleKey((EKeyboardKey)key);
+        pageSelectionHandler->HandleKey((EKeyboardKey)key);
+        
         Redraw();
     }
 }

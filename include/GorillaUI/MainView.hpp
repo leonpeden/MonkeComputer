@@ -17,12 +17,12 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
     DECLARE_METHOD(void, DrawSubMenus);
     DECLARE_METHOD(void, OnKeyPressed, int key);
     DECLARE_INSTANCE_FIELD(bool, screenSaver);
+    DECLARE_INSTANCE_FIELD(int, entryCount);
+    DECLARE_INSTANCE_FIELD(int, pageCount);
 
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
-        GorillaUI::ModSettingsViewManager* modSettingsViewManager = nullptr;
-        GorillaUI::BaseGameViewManager* baseGameViewManager = nullptr;
-        GorillaUI::DetailView* detailView = nullptr;
+        GorillaUI::UISelectionHandler* pageSelectionHandler = nullptr;
 
     REGISTER_FUNCTION(MainView,
         REGISTER_METHOD(Awake);
@@ -33,5 +33,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
         REGISTER_METHOD(DrawSubMenus);
         REGISTER_METHOD(OnKeyPressed);
         REGISTER_FIELD(screenSaver);
+        REGISTER_FIELD(entryCount);
+        REGISTER_FIELD(pageCount);
     )
 )

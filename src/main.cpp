@@ -76,15 +76,18 @@ extern "C" void load()
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     
     using namespace GorillaUI::Components;
-    custom_types::Register::RegisterTypes<View, ViewManager>();
+    custom_types::Register::RegisterTypes<CustomComputer, View, ViewManager, GorillaKeyboardButton>();
     custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView, DetailView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
-    custom_types::Register::RegisterTypes<GorillaKeyboardButton, CustomComputer>();
 
     custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
     custom_types::Register::RegisterType<MonkeComputerConfigView>();
-    GorillaUI::Register::RegisterView<MonkeComputerConfigView*>("Monke Computer", "1.0.0");
+    GorillaUI::Register::RegisterViewManager<BaseGameViewManager*>("Game Settings", "1.0.3");
+    GorillaUI::Register::RegisterViewManager<ModSettingsViewManager*>("Mod Settings", VERSION);
+    GorillaUI::Register::RegisterView<DetailView*>("Details", VERSION);
+    
+    GorillaUI::Register::RegisterSettingsView<MonkeComputerConfigView*>("Monke Computer", "1.0.0");
     INFO("Mod Loaded!");
 }

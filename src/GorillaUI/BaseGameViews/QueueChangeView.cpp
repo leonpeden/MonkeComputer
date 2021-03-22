@@ -34,7 +34,7 @@ namespace GorillaUI
                 type = "DEFAULT";
                 break;
             case 1:
-                type = "COMPETETIVE";
+                type = "COMPETITIVE";
                 break;
             default:
                 break;
@@ -64,7 +64,7 @@ namespace GorillaUI
 
         std::vector<std::string> queues = {
             "Default",
-            "Competetive"
+            "Competitive"
         };
         
         SelectionHelper::DrawSelection(queues, selectionHandler->currentSelectionIndex, text);

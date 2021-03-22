@@ -17,17 +17,16 @@ namespace GorillaUI::Components
         if (didActivate)
             il2cpp_utils::RunMethod(this, didActivate, !activatedBefore);
 
-
-        //il2cpp_utils::RunMethod(this, "DidActivate", !activatedBefore);
         if (activeView)
+        {
+            activeView->computer = computer;
             activeView->Activate();
+        }
         activatedBefore = true;
     }
 
     void ViewManager::Deactivate()
     {
-        //il2cpp_utils::RunMethod(this, "DidDeactivate");
-
         auto* didDeactivate = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass (this), "DidDeactivate", 0);
         if (didDeactivate)
             il2cpp_utils::RunMethod(this, didDeactivate);
@@ -38,10 +37,10 @@ namespace GorillaUI::Components
         static Vector3 zero = {0.0f, 0.0f, 0.0f};
         childViewManager = manager;
         manager->parentViewManager = this;
-        
+        manager->computer = computer;
         activeView->Deactivate();
         manager->Activate();
-        CustomComputer::get_instance()->activeViewManager = manager;
+        computer->activeViewManager = manager;
     }
 
     void ViewManager::DismissViewManager(GorillaUI::Components::ViewManager* manager)
@@ -50,13 +49,14 @@ namespace GorillaUI::Components
         manager->activeView->Deactivate();
         manager->Deactivate();
         activeView->Activate();
-        CustomComputer::get_instance()->activeViewManager = this;
+        computer->activeViewManager = this;
         CustomComputer::Redraw();
     }
 
     void ViewManager::ReplaceTopView(GorillaUI::Components::View* view)
     {
         if (activeView) activeView->Deactivate();
+        view->computer = computer;
         activeView = view;
         activeView->Activate();
         CustomComputer::Redraw();

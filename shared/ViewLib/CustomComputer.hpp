@@ -14,6 +14,8 @@
 
 namespace GorillaUI::Components {
     class GorillaKeyboardButton;
+    class ViewManager;
+    class View;
 }
 
 using keymap = std::map<GorillaUI::EKeyboardKey, GorillaUI::Components::GorillaKeyboardButton*>;

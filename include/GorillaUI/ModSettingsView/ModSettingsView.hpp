@@ -12,9 +12,11 @@ DECLARE_CLASS_CODEGEN(GorillaUI, ModSettingsView, GorillaUI::Components::View,
     DECLARE_METHOD(void, DrawHeader);
     DECLARE_METHOD(void, DrawMods);
     DECLARE_METHOD(void, OnKeyPressed, int key);
-    
+    DECLARE_INSTANCE_FIELD(int, modCount);
+    DECLARE_INSTANCE_FIELD(int, pageCount);
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
+        GorillaUI::UISelectionHandler* pageSelectionHandler = nullptr;
     
     REGISTER_FUNCTION(ModSettingsView,
         REGISTER_METHOD(Awake);
@@ -24,5 +26,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, ModSettingsView, GorillaUI::Components::View,
         REGISTER_METHOD(DrawHeader);
         REGISTER_METHOD(DrawMods);
         REGISTER_METHOD(OnKeyPressed);
+        REGISTER_FIELD(modCount);
+        REGISTER_FIELD(pageCount);
     )
 )

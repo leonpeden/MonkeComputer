@@ -17,6 +17,7 @@ namespace GorillaUI
         if (firstActivation)
         {
             baseGameView = CreateView<BaseGameView*>();
+            baseGameView->computer = computer;
             activeView = baseGameView;
         }
     }
