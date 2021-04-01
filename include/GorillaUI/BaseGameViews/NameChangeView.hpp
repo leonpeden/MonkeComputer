@@ -11,7 +11,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, NameChangeView, GorillaUI::Components::View,
     DECLARE_METHOD(void, DrawHeader);
     DECLARE_METHOD(void, DrawName);
     DECLARE_METHOD(void, OnKeyPressed, int key);
-
+    DECLARE_INSTANCE_FIELD(bool, lastNameFailed);
     public:
         void EnterName(std::string code);
         GorillaUI::UITextInputHandler* textInputHandler = nullptr;
@@ -23,5 +23,6 @@ DECLARE_CLASS_CODEGEN(GorillaUI, NameChangeView, GorillaUI::Components::View,
         REGISTER_METHOD(DrawHeader);
         REGISTER_METHOD(DrawName);
         REGISTER_METHOD(OnKeyPressed);
+        REGISTER_FIELD(lastNameFailed);
     )
 )

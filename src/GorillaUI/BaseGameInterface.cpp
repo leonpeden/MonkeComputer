@@ -26,14 +26,16 @@ namespace GorillaUI::BaseGameInterface
         }
     }
 
-    void SetName(std::string name)
+    bool SetName(std::string name)
     {
         Il2CppObject* gorillaComputer = *il2cpp_utils::GetFieldValue("", "GorillaComputer", "instance");
-        if (!gorillaComputer) return;
-
-        Il2CppObject* localPlayer = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_LocalPlayer");
+        if (!gorillaComputer) return false;
 
         Il2CppString* csName = il2cpp_utils::createcsstr(name);
+
+        if (!*il2cpp_utils::RunMethod<bool>(gorillaComputer, "CheckAutoBanList", csName)) return false;
+
+        Il2CppObject* localPlayer = *il2cpp_utils::RunMethod("Photon.Pun", "PhotonNetwork", "get_LocalPlayer");
         il2cpp_utils::RunMethod(localPlayer, "set_NickName", csName);
 
         Il2CppObject* offlineVRRigNametagText = *il2cpp_utils::GetFieldValue(gorillaComputer, "offlineVRRigNametagText");
@@ -42,6 +44,7 @@ namespace GorillaUI::BaseGameInterface
         
         il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "SetString", il2cpp_utils::createcsstr("playerName"), csName);
         il2cpp_utils::RunMethod("UnityEngine", "PlayerPrefs", "Save");
+        return true;
     }
 
     void Disconnect()
@@ -437,7 +440,8 @@ namespace GorillaUI::BaseGameInterface
 
         int queueToIndex(std::string queue)
         {
-            if (queue == "COMPETETIVE") return 1;
+            if (queue == "CASUAL") return 2;
+            else if (queue == "COMPETITIVE") return 1;
             else return 0;
         }
     }

@@ -8,7 +8,7 @@
     "url": "https://github.com/RedBrumbler/MonkeComputer",
     "additionalData": {
       "branchName": "version-v1.0.2",
-      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.0.2/MonkeComputer.qmod"
+      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.0.2/libmonkecomputer.so"
     }
   },
   "dependencies": [

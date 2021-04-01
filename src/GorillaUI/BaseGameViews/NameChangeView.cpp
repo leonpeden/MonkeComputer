@@ -14,6 +14,7 @@ namespace GorillaUI
     {
         if (!textInputHandler) textInputHandler = new UITextInputHandler(EKeyboardKey::Enter, true);
         textInputHandler->text = BaseGameInterface::Name::get_name();
+        lastNameFailed = false;
     }
 
     void NameChangeView::DidActivate(bool firstActivation)
@@ -30,7 +31,7 @@ namespace GorillaUI
     void NameChangeView::EnterName(std::string code)
     {
         if (code == BaseGameInterface::Name::get_name()) return;
-        BaseGameInterface::SetName(code);
+        lastNameFailed = !BaseGameInterface::SetName(code);
     }
 
     void NameChangeView::Redraw()
@@ -53,6 +54,11 @@ namespace GorillaUI
         text += "\n";
         text += "  <size=40>Press enter to change your name:</size>\n";
         text += string_format("  Your entered name:\n  <color=#fdfdfd>%s</color>\n", textInputHandler->text.c_str());
+
+        if (lastNameFailed)
+        {
+            il2cpp_utils::RunMethod("UnityEngine", "Application", "Quit");
+        }
     }
     
     void NameChangeView::OnKeyPressed(int key)

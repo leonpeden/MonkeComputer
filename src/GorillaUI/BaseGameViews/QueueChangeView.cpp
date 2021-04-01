@@ -12,7 +12,7 @@ namespace GorillaUI
     void QueueChangeView::Awake()
     {
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = 2;
+        selectionHandler->max = 3;
 
         std::string queueType = BaseGameInterface::Queue::get_Queue();
         selectionHandler->currentSelectionIndex = BaseGameInterface::Queue::queueToIndex(queueType);
@@ -35,6 +35,9 @@ namespace GorillaUI
                 break;
             case 1:
                 type = "COMPETITIVE";
+                break;
+            case 2:
+                type = "CASUAL";
                 break;
             default:
                 break;
@@ -64,7 +67,8 @@ namespace GorillaUI
 
         std::vector<std::string> queues = {
             "Default",
-            "Competitive"
+            "Competitive",
+            "CASUAL"
         };
         
         SelectionHelper::DrawSelection(queues, selectionHandler->currentSelectionIndex, text);

@@ -5,7 +5,7 @@
 namespace GorillaUI::BaseGameInterface
 {
     void SetColor(float r, float g, float b);
-    void SetName(std::string name);
+    bool SetName(std::string name);
     void Disconnect();
     void JoinRoom(std::string roomID);
     void SetpttType(std::string pttType);
