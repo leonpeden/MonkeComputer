@@ -68,7 +68,7 @@ namespace GorillaUI
         std::vector<std::string> queues = {
             "Default",
             "Competitive",
-            "CASUAL"
+            "Casual"
         };
         
         SelectionHelper::DrawSelection(queues, selectionHandler->currentSelectionIndex, text);
@@ -81,6 +81,9 @@ namespace GorillaUI
                 break;
             case 1:
                 text += " Competetive: For players looking for a challenge,\n expect pros and people looking to improve their monke skills\n";
+                break;
+            case 2:
+                text += " Casual: For people just looking to hang out, nobody will be it or be infected\n";
                 break;
             default:
                 break;

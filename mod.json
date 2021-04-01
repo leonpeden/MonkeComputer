@@ -1,11 +1,11 @@
 {
-    "_QPVersion": "0.1.0",
+    "_QPVersion": "0.2.0",
     "name": "Monke Computer",
     "id": "MonkeComputer",
     "author": "RedBrumbler",
     "version": "1.0.3",
     "packageId": "com.AnotherAxiom.GorillaTag",
-    "packageVersion": "1.0.3",
+    "packageVersion": "1.0.4",
     "type": "Gameplay",
     "modFiles": [
         "libmonkecomputer.so"
@@ -14,7 +14,7 @@
         "libbeatsaber-hook_1_2_3.so",
         "libbeatsaber-hook_1_2_4.so",
         "libcustom-types.so",
-        "libquest-cosmetic-loader_0_1_0.so",
+        "libquest-cosmetic-loader_0_1_1.so",
         "libzip.so"
     ],
     "fileCopies": [
