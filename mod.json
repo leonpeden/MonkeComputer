@@ -3,7 +3,7 @@
     "name": "Monke Computer",
     "id": "MonkeComputer",
     "author": "RedBrumbler",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "packageId": "com.AnotherAxiom.GorillaTag",
     "packageVersion": "1.0.3",
     "type": "Gameplay",
@@ -11,18 +11,16 @@
         "libmonkecomputer.so"
     ],
     "libraryFiles": [
-        "libbeatsaber-hook_1_1_0.so",
-        "libbeatsaber-hook_1_1_2.so",
-        "libcustom-types.so"
+        "libbeatsaber-hook_1_2_3.so",
+        "libbeatsaber-hook_1_2_4.so",
+        "libcustom-types.so",
+        "libquest-cosmetic-loader_0_1_0.so",
+        "libzip.so"
     ],
     "fileCopies": [
         {
-            "name": "monitor.json",
-            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor/monitor.json"
-        },
-        {
-            "name": "monitor",
-            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor/monitor"
+            "name": "Monitor",
+            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor"
         }
     ]
 }

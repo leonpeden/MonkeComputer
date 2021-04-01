@@ -1,7 +1,7 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "Utils/TextUtils.hpp"
 #include "KeyExtension.hpp"
-#include "cosmeticsloader/shared/CosmeticLoader.hpp"
+#include "quest-cosmetic-loader/shared/CosmeticLoader.hpp"
 #include "GorillaUI/MainViewManager.hpp"
 #include "config.hpp"
 
@@ -56,7 +56,7 @@ namespace GorillaUI
         
         using namespace CosmeticsLoader;
         Il2CppObject* newMonitor = nullptr;
-        std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor/monitor.json";
+        std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor";
         auto* loader = new CosmeticLoader(path, [&](std::string name, Il2CppObject* obj){
             newMonitor = obj;
         }, "_Monitor", il2cpp_utils::GetSystemType("UnityEngine", "GameObject"));

@@ -2,11 +2,14 @@
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
-    "name": "SpaceMonke",
-    "id": "SpaceMonke",
-    "version": "0.1.0",
-    "url": null,
-    "additionalData": {}
+    "name": "MonkeComputer",
+    "id": "monkecomputer",
+    "version": "1.0.2",
+    "url": "https://github.com/RedBrumbler/MonkeComputer",
+    "additionalData": {
+      "branchName": "version-v1.0.2",
+      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.0.2/MonkeComputer.qmod"
+    }
   },
   "dependencies": [
     {
@@ -20,6 +23,11 @@
     },
     {
       "id": "custom-types",
+      "versionRange": "*",
+      "additionalData": {}
+    },
+    {
+      "id": "quest-cosmetic-loader",
       "versionRange": "*",
       "additionalData": {}
     }

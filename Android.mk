@@ -18,13 +18,13 @@ TARGET_ARCH_ABI := $(APP_ABI)
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-# Creating prebuilt for dependency: beatsaber-hook - version: 1.1.2
+# Creating prebuilt for dependency: beatsaber-hook - version: 1.2.4
 include $(CLEAR_VARS)
-LOCAL_MODULE := beatsaber-hook_1_1_2
+LOCAL_MODULE := beatsaber-hook_1_2_4
 LOCAL_EXPORT_C_INCLUDES := extern/beatsaber-hook
-LOCAL_SRC_FILES := extern/libbeatsaber-hook_1_1_2.so
+LOCAL_SRC_FILES := extern/libbeatsaber-hook_1_2_4.so
 include $(PREBUILT_SHARED_LIBRARY)
-# Creating prebuilt for dependency: custom-types - version: 0.4.7
+# Creating prebuilt for dependency: custom-types - version: 0.5.1
 include $(CLEAR_VARS)
 LOCAL_MODULE := custom-types
 LOCAL_EXPORT_C_INCLUDES := extern/custom-types
@@ -33,8 +33,20 @@ include $(PREBUILT_SHARED_LIBRARY)
 # Creating prebuilt for dependency: modloader - version: 1.0.4
 include $(CLEAR_VARS)
 LOCAL_MODULE := modloader
-LOCAL_EXPORT_C_INCLUDES := extern/modloader 
+LOCAL_EXPORT_C_INCLUDES := extern/modloader
 LOCAL_SRC_FILES := extern/libmodloader.so
+include $(PREBUILT_SHARED_LIBRARY)
+# Creating prebuilt for dependency: quest-cosmetic-loader - version: 0.1.1
+include $(CLEAR_VARS)
+LOCAL_MODULE := quest-cosmetic-loader_0_1_1
+LOCAL_EXPORT_C_INCLUDES := extern/quest-cosmetic-loader
+LOCAL_SRC_FILES := extern/libquest-cosmetic-loader_0_1_1.so
+include $(PREBUILT_SHARED_LIBRARY)
+# Creating prebuilt for dependency: zip - version: 1.7.3
+include $(CLEAR_VARS)
+LOCAL_MODULE := zip
+LOCAL_EXPORT_C_INCLUDES := extern/zip
+LOCAL_SRC_FILES := extern/libzip.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 # If you would like to use more shared libraries (such as custom UI, utils, or more) add them here, following the format above.
@@ -46,8 +58,10 @@ LOCAL_SRC_FILES += $(call rwildcard,src/**,*.cpp)
 LOCAL_SRC_FILES += $(call rwildcard,extern/beatsaber-hook/src/inline-hook,*.cpp)
 LOCAL_SRC_FILES += $(call rwildcard,extern/beatsaber-hook/src/inline-hook,*.c)
 LOCAL_SHARED_LIBRARIES += modloader
-LOCAL_SHARED_LIBRARIES += beatsaber-hook_1_1_2
+LOCAL_SHARED_LIBRARIES += beatsaber-hook_1_2_4
 LOCAL_SHARED_LIBRARIES += custom-types
+LOCAL_SHARED_LIBRARIES += quest-cosmetic-loader_0_1_1
+LOCAL_SHARED_LIBRARIES += zip
 LOCAL_LDLIBS += -llog
 LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/codegen/include' -DID='"MonkeComputer"' -DVERSION='"1.0.2"' -I'./shared' -I'./extern' -Wno-inaccessible-base -Wno-invalid-offsetof
 LOCAL_C_INCLUDES += ./include ./src
