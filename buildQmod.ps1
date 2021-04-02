@@ -13,7 +13,7 @@ Compress-Archive -Path  "./libs/arm64-v8a/libbeatsaber-hook_1_2_4.so",`
                         "./libs/arm64-v8a/libmonkecomputer.so",`
                         "./libs/arm64-v8a/libquest-cosmetic-loader_0_1_1.so",`
                         "./libs/arm64-v8a/libzip.so",`
-                        "./ExtraFiles/Monitor",`
+                        "./ExtraFiles/Monitor.package",`
                         "./mod.json" -DestinationPath "./MonkeComputer.zip" -Update
 
 & copy-item -Force "./MonkeComputer.zip" "./MonkeComputer.qmod"

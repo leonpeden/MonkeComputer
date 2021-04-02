@@ -19,8 +19,8 @@
     ],
     "fileCopies": [
         {
-            "name": "Monitor",
-            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor"
+            "name": "Monitor.package",
+            "destination": "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor.package"
         }
     ]
 }

@@ -56,7 +56,7 @@ namespace GorillaUI
         
         using namespace CosmeticsLoader;
         Il2CppObject* newMonitor = nullptr;
-        std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor";
+        std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor.package";
         auto* loader = new CosmeticLoader(path, [&](std::string name, Il2CppObject* obj){
             newMonitor = obj;
         }, "_Monitor", il2cpp_utils::GetSystemType("UnityEngine", "GameObject"));
