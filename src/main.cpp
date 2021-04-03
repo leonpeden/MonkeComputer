@@ -29,6 +29,9 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "Register.hpp"
 
+#include "CustomQueues.hpp"
+#include "GorillaUI/CustomQueueView.hpp"
+
 #include "typedefs.h"
 #include <vector>
 
@@ -120,11 +123,15 @@ extern "C" void load()
     custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
+    custom_types::Register::RegisterType<CustomQueueView>();
     custom_types::Register::RegisterType<MonkeComputerConfigView>();
-    GorillaUI::Register::RegisterViewManager<BaseGameViewManager*>("Game Settings", "1.0.3");
+    GorillaUI::Register::RegisterViewManager<BaseGameViewManager*>("Game Settings", "1.0.4");
     GorillaUI::Register::RegisterViewManager<ModSettingsViewManager*>("Mod Settings", VERSION);
     GorillaUI::Register::RegisterView<DetailView*>("Details", VERSION);
+    GorillaUI::Register::RegisterView<CustomQueueView*>("Custom Queues", VERSION);
     
-    GorillaUI::Register::RegisterSettingsView<MonkeComputerConfigView*>("Monke Computer", "1.0.0");
+    GorillaUI::Register::RegisterSettingsView<MonkeComputerConfigView*>("Monke Computer", VERSION);
+
+    CustomQueues::add_queue("MODDED", "Modded", "  <size=40>A Queue for modded players, outside of the normal public lobbies.\n    You can't really report anyone for having a mod here, but griefing\n    is still prohibited.\n</size>");
     INFO("Mod Loaded!");
 }
