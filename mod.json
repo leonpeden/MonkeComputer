@@ -7,10 +7,11 @@
     "packageId": "com.AnotherAxiom.GorillaTag",
     "packageVersion": "1.0.4",
     "type": "Gameplay",
+    "isLibrary": true,
     "modFiles": [
-        "libmonkecomputer.so"
     ],
     "libraryFiles": [
+        "libmonkecomputer.so",
         "libbeatsaber-hook_1_2_3.so",
         "libbeatsaber-hook_1_2_4.so",
         "libcustom-types.so",

@@ -7,8 +7,9 @@
     "version": "1.0.4",
     "url": "https://github.com/RedBrumbler/MonkeComputer",
     "additionalData": {
-      "branchName": "version-v1.0.4",
-      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.0.4/libmonkecomputer.so"
+        "overrideSoName": "libmonkecomputer.so",
+        "branchName": "version-v1.0.4",
+        "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.0.4/libmonkecomputer.so"
     }
   },
   "dependencies": [

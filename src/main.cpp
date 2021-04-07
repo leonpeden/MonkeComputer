@@ -97,6 +97,7 @@ MAKE_HOOK_OFFSETLESS(GorillaComputer_BanMe, void, Il2CppObject* self, int hours,
     INFO("Player Tried setting name %s, but a ban of %d hours was prevented", name.c_str(), hours);
 }
 
+/*
 extern "C" void setup(ModInfo& info)
 {
     info.id = ID;
@@ -105,8 +106,9 @@ extern "C" void setup(ModInfo& info)
 
     INFO("Setup!");
 }
+*/
 
-extern "C" void load()
+void loadlib()
 {
     INFO("Loading mod...");
     if (!LoadConfig())

@@ -4,6 +4,7 @@
 
 namespace GorillaUI
 {
+    void Init();
     Components::ViewManager* CreateViewManager(Il2CppClass* klass);
     Components::View* CreateView(Il2CppClass* klass);
 
