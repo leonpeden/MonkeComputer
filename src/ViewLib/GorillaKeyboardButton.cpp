@@ -2,9 +2,14 @@
 #include "ViewLib/ViewManager.hpp"
 #include <thread>
 
+#include "UnityEngine/Vector3.hpp"
 #include "UnityEngine/Color.hpp"
 #include "UnityEngine/MeshRenderer.hpp"
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/UI/Text.hpp"
 
+#include "GlobalNamespace/GorillaTriggerColliderHandIndicator.hpp"
+#include "GlobalNamespace/GorillaTagger.hpp"
 DEFINE_TYPE(GorillaUI::Components::GorillaKeyboardButton);
 
 #define KEY_BUMP_AMOUNT 0.2f
@@ -29,16 +34,15 @@ namespace GorillaUI::Components
     {
         this->computer = computer;
         this->key = key;
-        il2cpp_utils::RunMethod(this, "set_enabled", true);
+        set_enabled(true);
     }
 
     void GorillaKeyboardButton::Init(GorillaUI::CustomComputer* computer, EKeyboardKey key, std::string text)
     {
         this->Init(computer, key);
 
-        Il2CppObject* go = *il2cpp_utils::RunMethod(this, "get_gameObject");
-        Il2CppObject* textComponent = *il2cpp_utils::RunGenericMethod(go, "GetComponentInChildren", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("UnityEngine.UI", "Text")});
-        il2cpp_utils::RunMethod(textComponent, "set_text", il2cpp_utils::createcsstr(text));
+        UI::Text* textComponent = get_gameObject()->GetComponentInChildren<UI::Text*>();
+        textComponent->set_text(il2cpp_utils::createcsstr(text));
     }
 
     void GorillaKeyboardButton::Init(GorillaUI::CustomComputer* computer, EKeyboardKey key, std::string text, Color buttonColor)
@@ -46,26 +50,24 @@ namespace GorillaUI::Components
         Init(computer, key, text);
 
         originalColor = buttonColor;
-        il2cpp_utils::RunMethod(material, "set_color", originalColor);
+        material->set_color(originalColor);
     }
 
 
     void GorillaKeyboardButton::BumpIn()
     {
-        Il2CppObject* transform = *il2cpp_utils::RunMethod(this, "get_transform");
-        Vector3 pos = *il2cpp_utils::RunMethod<Vector3>(transform, "get_localPosition");
+        Vector3 pos = get_transform()->get_localPosition();
         pos.y -= KEY_BUMP_AMOUNT;
-        il2cpp_utils::RunMethod(transform, "set_localPosition", pos);
-        il2cpp_utils::RunMethod(material, "set_color", pressedColor);
+        get_transform()->set_localPosition(pos);
+        material->set_color(pressedColor);
     }
 
     void GorillaKeyboardButton::BumpOut()
     {
-        Il2CppObject* transform = *il2cpp_utils::RunMethod(this, "get_transform");
-        Vector3 pos = *il2cpp_utils::RunMethod<Vector3>(transform, "get_localPosition");
+        Vector3 pos = get_transform()->get_localPosition();
         pos.y += KEY_BUMP_AMOUNT;
-        il2cpp_utils::RunMethod(transform, "set_localPosition", pos);
-        il2cpp_utils::RunMethod(material, "set_color", originalColor);
+        get_transform()->set_localPosition(pos);
+        material->set_color(originalColor);
     }
 
     void GorillaKeyboardButton::OnTriggerEnter(Collider* collider)
@@ -73,20 +75,21 @@ namespace GorillaUI::Components
         BumpIn();
         if (isOnCooldown) return;
         isOnCooldown = true;
-        Il2CppObject* handIndicator = CRASH_UNLESS(il2cpp_utils::RunGenericMethod(collider, "GetComponentInParent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaTriggerColliderHandIndicator")}));
+        
+        GlobalNamespace::GorillaTriggerColliderHandIndicator* handIndicator = collider->GetComponentInParent<GlobalNamespace::GorillaTriggerColliderHandIndicator*>();
         if (handIndicator)
 		{
-			Il2CppObject* component = CRASH_UNLESS(il2cpp_utils::RunGenericMethod(collider, "GetComponent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaTriggerColliderHandIndicator")}));
+            GlobalNamespace::GorillaTriggerColliderHandIndicator* component = collider->GetComponent<GlobalNamespace::GorillaTriggerColliderHandIndicator*>();
 
 			computer->PressButton(this);
 			if (component)
 			{
-				Il2CppObject* gorillaTagger = CRASH_UNLESS(il2cpp_utils::RunMethod("", "GorillaTagger", "get_Instance"));
-                bool isLeftHand = CRASH_UNLESS(il2cpp_utils::GetFieldValue<bool>(component, "isLeftHand"));
-                float tapHapticStrength = CRASH_UNLESS(il2cpp_utils::GetFieldValue<float>(gorillaTagger, "tapHapticStrength"));
-                float tapHapticDuration = CRASH_UNLESS(il2cpp_utils::GetFieldValue<float>(gorillaTagger, "tapHapticDuration"));
+				GlobalNamespace::GorillaTagger* gorillaTagger = GlobalNamespace::GorillaTagger::get_Instance();
+                bool isLeftHand = component->isLeftHand;
+                float tapHapticStrength = gorillaTagger->tapHapticStrength;
+                float tapHapticDuration = gorillaTagger->tapHapticDuration;
     
-                CRASH_UNLESS(il2cpp_utils::RunMethod(gorillaTagger, "StartVibration", isLeftHand, tapHapticStrength / 2.0f, tapHapticDuration));          
+                gorillaTagger->StartVibration(isLeftHand, tapHapticStrength / 2.0f, tapHapticDuration);          
 			}
 		}
 

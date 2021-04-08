@@ -347,7 +347,7 @@ namespace GorillaUI::BaseGameInterface
                 if (it != playerIDsCurrentlyTouchingVector.end() && !roomPlayer->Equals(localPlayer))
                 {
                     static Il2CppString* joinPubWithFriends = il2cpp_utils::createcsstr("JoinPubWithFreinds", il2cpp_utils::StringType::Manual);
-                    il2cpp_utils::RunMethod(photonView, "RPC", joinPubWithFriends, roomPlayer, System::Array::Empty<Il2CppObject*>());
+                    photonView->RPC(joinPubWithFriends, roomPlayer, System::Array::Empty<Il2CppObject*>());
                 }
             }
 

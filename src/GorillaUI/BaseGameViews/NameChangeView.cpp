@@ -4,6 +4,8 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
+#include "UnityEngine/Application.hpp"
+
 DEFINE_TYPE(GorillaUI::NameChangeView);
 
 extern Logger& getLogger();
@@ -57,7 +59,7 @@ namespace GorillaUI
 
         if (lastNameFailed)
         {
-            il2cpp_utils::RunMethod("UnityEngine", "Application", "Quit");
+            UnityEngine::Application::Quit();
         }
     }
     

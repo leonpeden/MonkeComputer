@@ -53,7 +53,6 @@ Logger& getLogger()
 
 #define INFO(value...) getLogger().info(value)
 #define ERROR(value...) getLogger().error(value)
-#define run(value...) CRASH_UNLESS(il2cpp_utils::RunMethod(value))
 
 using namespace UnityEngine;
 using namespace GlobalNamespace;
