@@ -22,7 +22,7 @@ namespace GorillaUI
 
     Color CustomScreenInfo::get_color()
     {
-        return *il2cpp_utils::RunMethod<Color>(materials->values[1], "get_color");
+        return materials->values[1]->get_color();
     }
 
     void CustomScreenInfo::set_text(std::string newText)
