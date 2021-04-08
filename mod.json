@@ -12,7 +12,7 @@
         {
             "id": "monkecodegen",
             "version": "^0.2.2",
-            "downloadIfMissing": "https://github.com/RedBrumbler/MonkeCodegen/releases/latest/download/MonkeCodegen.qmod"
+            "downloadIfMissing": "https://github.com/RedBrumbler/MonkeCodegen/releases/download/0.2.2/MonkeCodegen.qmod"
         }
     ],
     "modFiles": [
