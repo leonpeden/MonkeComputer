@@ -31,7 +31,7 @@ namespace GorillaUI
         std::string gameVer = BaseGameInterface::get_gameVersion();
         if (gameVer == "live102") old = true; 
     	else if (gameVer == "live101") old = true;
-        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
+        if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true, true);
         selectionHandler->max = old ? 4 : 7;
     }
 

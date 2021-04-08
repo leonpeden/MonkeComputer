@@ -492,8 +492,8 @@ namespace GorillaUI::BaseGameInterface
         std::string get_Queue()
         {
             if (!currentQueue) currentQueue = il2cpp_utils::createcsstr("currentQueue", il2cpp_utils::StringType::Manual);
-            Il2CppString* currentQueue = PlayerPrefs::GetString(currentQueue, il2cpp_utils::createcsstr("DEFAULT"));
-            return to_utf8(csstrtostr(currentQueue));
+            Il2CppString* currentQueueCS = PlayerPrefs::GetString(currentQueue, il2cpp_utils::createcsstr("DEFAULT"));
+            return to_utf8(csstrtostr(currentQueueCS));
         }
 
         int queueToIndex(std::string queue)
