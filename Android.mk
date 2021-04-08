@@ -39,7 +39,7 @@ LOCAL_SRC_FILES := extern/libmodloader.so
 include $(PREBUILT_SHARED_LIBRARY)
 # Creating prebuilt for dependency: quest-cosmetic-loader - version: 0.1.2
 include $(CLEAR_VARS)
-LOCAL_MODULE := questcosmeticloader_0_1_2
+LOCAL_MODULE := quest-cosmetic-loader_0_1_2
 LOCAL_EXPORT_C_INCLUDES := extern/quest-cosmetic-loader
 LOCAL_SRC_FILES := extern/libquest-cosmetic-loader_0_1_2.so
 include $(PREBUILT_SHARED_LIBRARY)
@@ -67,7 +67,7 @@ LOCAL_SRC_FILES += $(call rwildcard,extern/beatsaber-hook/src/inline-hook,*.c)
 LOCAL_SHARED_LIBRARIES += modloader
 LOCAL_SHARED_LIBRARIES += beatsaber-hook_1_2_6
 LOCAL_SHARED_LIBRARIES += custom-types
-LOCAL_SHARED_LIBRARIES += questcosmeticloader_0_1_2
+LOCAL_SHARED_LIBRARIES += quest-cosmetic-loader_0_1_2
 LOCAL_SHARED_LIBRARIES += zip
 LOCAL_SHARED_LIBRARIES += monkecodegen_0_2_2
 LOCAL_LDLIBS += -llog
