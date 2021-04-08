@@ -5,12 +5,27 @@
 #include "GorillaUI/MainViewManager.hpp"
 #include "config.hpp"
 
-DEFINE_CLASS(GorillaUI::CustomComputer);
+#include "GlobalNamespace/GorillaComputer.hpp"
+#include "GlobalNamespace/GorillaKeyboardButton.hpp"
+
+#include "UnityEngine/Object.hpp"
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Transform.hpp"
+#include "UnityEngine/MeshRenderer.hpp"
+#include "UnityEngine/Material.hpp"
+#include "UnityEngine/Color.hpp"
+#include "UnityEngine/Vector3.hpp"
+
+DEFINE_TYPE(GorillaUI::CustomComputer);
+
 using namespace GorillaUI::Components;
 using namespace TextUtils;
 using namespace GorillaUI::KeyExtension;
 
 extern Logger& getLogger();
+
+using namespace GlobalNamespace;
+using namespace UnityEngine;
 
 namespace GorillaUI
 {
@@ -19,25 +34,25 @@ namespace GorillaUI
         instance = this;
         activeViewManager = *il2cpp_utils::New<GorillaUI::MainViewManager*>();
         activeViewManager->computer = this;
+
         il2cpp_utils::SetFieldValue(activeViewManager, "mainView", initialView);
+
         activeViewManager->activeView = initialView;
         initialView->computer = this;
         activeViewManager->Activate();
         
-        gorillaComputer = *il2cpp_utils::RunGenericMethod(this, "GetComponent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaComputer")});
-        il2cpp_utils::RunMethod(gorillaComputer, "set_enabled", false);
+        gorillaComputer = this->GetComponent<GorillaComputer*>();
+        gorillaComputer->set_enabled(false);
 
-
-        Il2CppObject* transform = *il2cpp_utils::RunMethod(gorillaComputer, "get_transform");
-        Il2CppObject* keyboardTransform = *il2cpp_utils::RunMethod(transform, "Find", il2cpp_utils::createcsstr("keyboard"));
-        Il2CppObject* keyboardGO =  *il2cpp_utils::RunMethod(keyboardTransform, "get_gameObject");
+        Transform* transform = gorillaComputer->get_transform();
+        Transform* keyboardTransform = transform->Find(il2cpp_utils::createcsstr("keyboard"));
+        GameObject* keyboardGO =  keyboardTransform->get_gameObject();
         
-        std::vector<Il2CppClass*> klass = {il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")};
-        Il2CppObject* meshRenderer = *il2cpp_utils::RunGenericMethod(keyboardGO, "GetComponent", klass);
-        Il2CppObject* material = *il2cpp_utils::RunMethod(meshRenderer, "get_material");
+        MeshRenderer* meshRenderer = keyboardGO->GetComponent<MeshRenderer*>();
+        Material* material = meshRenderer->get_material();
         Color kbColor = {0.0f, 0.0f, 0.0f};
         
-        il2cpp_utils::RunMethod(material, "set_color", kbColor);
+        material->set_color(kbColor);
         ReplaceKeys(); 
         screenInfo = CreateMonitor();
     }
@@ -49,36 +64,36 @@ namespace GorillaUI
 
     CustomScreenInfo CustomComputer::CreateMonitor()
     {
-        Il2CppObject* transform = *il2cpp_utils::RunMethod(this, "get_transform");
-        Il2CppObject* monitor = *il2cpp_utils::RunMethod(transform, "Find", il2cpp_utils::createcsstr("monitor"));
-        Il2CppObject* monitorGO = *il2cpp_utils::RunMethod(monitor, "get_gameObject");
-        il2cpp_utils::RunMethod(monitorGO, "SetActive", false);
+        Transform* transform = get_transform();
+        Transform* monitor = transform->Find(il2cpp_utils::createcsstr("monitor"));
+        GameObject* monitorGO = monitor->get_gameObject();
+        monitorGO->SetActive(false);
         
         using namespace CosmeticsLoader;
-        Il2CppObject* newMonitor = nullptr;
+        GameObject* newMonitor = nullptr;
         std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor.package";
         auto* loader = new CosmeticLoader(path, [&](std::string name, Il2CppObject* obj){
-            newMonitor = obj;
+            newMonitor = (GameObject*)obj;
         }, "_Monitor", il2cpp_utils::GetSystemType("UnityEngine", "GameObject"));
         
-        il2cpp_utils::RunMethod(newMonitor, "set_name", il2cpp_utils::createcsstr("Custom Monitor"));
+        newMonitor->set_name(il2cpp_utils::createcsstr("Custom Monitor"));
 
         Vector3 localScale = {0.4f, 0.4f, 0.4f};
         Vector3 eulerAngles = {0.0f, 90.0f, 0.0f};
         Vector3 position = {-69.0f, 12.11f, -82.8f};
 
-        Il2CppObject* newMonitorTransform = *il2cpp_utils::RunMethod(newMonitor, "get_transform");
+        Transform* newMonitorTransform = newMonitor->get_transform();
 
-        il2cpp_utils::RunMethod(newMonitorTransform, "set_localScale", localScale);
-        il2cpp_utils::RunMethod(newMonitorTransform, "set_eulerAngles", eulerAngles);
-        il2cpp_utils::RunMethod(newMonitorTransform, "set_position", position);
+        newMonitorTransform->set_localScale(localScale);
+        newMonitorTransform->set_eulerAngles(eulerAngles);
+        newMonitorTransform->set_position(position);
 
         CustomScreenInfo info;
-
+        
         info.transform = newMonitorTransform;
-        info.text = *il2cpp_utils::RunGenericMethod(newMonitor, "GetComponentInChildren", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("UnityEngine.UI", "Text")});
-        info.renderer = *il2cpp_utils::RunGenericMethod(newMonitor, "GetComponentInChildren", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")});
-        info.materials = *il2cpp_utils::RunMethod<Array<Il2CppObject*>*>(info.renderer, "get_materials");
+        info.text = newMonitor->GetComponentInChildren<UnityEngine::UI::Text*>();
+        info.renderer = newMonitor->GetComponentInChildren<UnityEngine::MeshRenderer*>();
+        info.materials = info.renderer->get_materials();
 
         info.set_color(config.screenColor);
         info.set_fontSize(80);
@@ -88,7 +103,7 @@ namespace GorillaUI
 
     void CustomComputer::SetBG(float r, float g, float b)
     {
-        screenInfo.set_color({r, g, b});
+        screenInfo.set_color(Color(r, g, b));
         config.screenColor = {r, g, b};
         SaveConfig();
     }
@@ -98,39 +113,34 @@ namespace GorillaUI
         keys.clear();
 
         // hijack the original keys
-        Array<Il2CppObject*>* buttons = *il2cpp_utils::RunGenericMethod<Array<Il2CppObject*>*>(this, "GetComponentsInChildren", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("", "GorillaKeyboardButton")});
+        Array<GlobalNamespace::GorillaKeyboardButton*>* buttons = this->GetComponentsInChildren<GlobalNamespace::GorillaKeyboardButton*>();
         int length = buttons->Length();
         for (int i = 0; i < length; i++)
         {
-            Il2CppObject* button = buttons->values[i];
-            Il2CppString* characterString = *il2cpp_utils::GetFieldValue<Il2CppString*>(button, "characterString");
+            GlobalNamespace::GorillaKeyboardButton* button = buttons->values[i];
+            Il2CppString* characterString = button->characterString;
             std::string cppString = to_utf8(csstrtostr(characterString));
             cppString = toLower(cppString);
             EKeyboardKey key;
             if (!NameToKey(cppString, key)) continue;
-            Il2CppObject* gameObject = *il2cpp_utils::RunMethod(button, "get_gameObject");
-            GorillaKeyboardButton* customButton = *il2cpp_utils::RunGenericMethod<GorillaKeyboardButton*>(gameObject, "AddComponent", std::vector<Il2CppClass*>{classof(GorillaKeyboardButton*)});
+            GameObject* gameObject = button->get_gameObject();
+            GorillaUI::Components::GorillaKeyboardButton* customButton = gameObject->AddComponent<GorillaUI::Components::GorillaKeyboardButton*>();
 
-            float pressTime = *il2cpp_utils::GetFieldValue<float>(button, "pressTime");
-            bool functionKey = *il2cpp_utils::GetFieldValue<bool>(button, "functionKey");
-            Array<float>* sliderValues = *il2cpp_utils::GetFieldValue<Array<float>*>(button, "sliderValues");
-            
-            il2cpp_utils::SetFieldValue(customButton, "pressTime", pressTime);
-            il2cpp_utils::SetFieldValue(customButton, "functionKey", functionKey);
-            il2cpp_utils::SetFieldValue(customButton, "sliderValues", sliderValues);
+            customButton->pressTime = button->pressTime;
+            customButton->functionKey = button->functionKey;
+            customButton->sliderValues = button->sliderValues;
+            Object::DestroyImmediate(button);
 
-            il2cpp_utils::RunMethod("UnityEngine", "Object", "DestroyImmediate", button);
-            
             customButton->Init(this, key);
             keys[key] = customButton;
         }
 
-        auto* enterKey = keys.at(EKeyboardKey::Enter);
-        auto* mKey = keys.at(EKeyboardKey::M);
-        auto* deleteKey = keys.at(EKeyboardKey::Delete);
+        GorillaUI::Components::GorillaKeyboardButton* enterKey = keys.at(EKeyboardKey::Enter);
+        GorillaUI::Components::GorillaKeyboardButton* mKey = keys.at(EKeyboardKey::M);
+        GorillaUI::Components::GorillaKeyboardButton* deleteKey = keys.at(EKeyboardKey::Delete);
 
-        Il2CppObject* enterGO = *il2cpp_utils::RunMethod(enterKey, "get_gameObject");
-        Il2CppObject* deleteGO = *il2cpp_utils::RunMethod(deleteKey, "get_gameObject");
+        GameObject* enterGO = enterKey->get_gameObject();
+        GameObject* deleteGO = deleteKey->get_gameObject();
         Vector3 spaceOffset = {2.6f, 0.0f, 3.0f};
         Vector3 deleteOffset = {2.3f, 0.0f, 0.0f};
         
@@ -149,39 +159,39 @@ namespace GorillaUI
         Vector3 downKeyOffset = {0.0f, 0.0f, 7.9f};
 
         // make arrow keys
-        Il2CppObject* mKeyGO = *il2cpp_utils::RunMethod(mKey, "get_gameObject");
+        GameObject* mKeyGO = mKey->get_gameObject();
 
-        Il2CppObject* mKeyT = *il2cpp_utils::RunMethod(mKey, "get_transform");
-        
         CreateKey(mKeyGO, "Left", leftKeyOffset, EKeyboardKey::Left, "<", arrowKeyButtonColor);
         CreateKey(mKeyGO, "Down", downKeyOffset, EKeyboardKey::Down, "v", arrowKeyButtonColor);
         CreateKey(mKeyGO, "Right", rightKeyOffset, EKeyboardKey::Right, ">", arrowKeyButtonColor);
         CreateKey(mKeyGO, "Up", upKeyOffset, EKeyboardKey::Up, "^", arrowKeyButtonColor);
     }
 
-    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKeyNoInit(Il2CppObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key)
+    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKeyNoInit(GameObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key)
     {
-        // make sure it's a GO
-        Il2CppObject* go = *il2cpp_utils::RunMethod(prefab, "get_gameObject");
+        if (!prefab) 
+        {
+            getLogger().error("Prefab for keyboard button was nullptr, returning");
+            return nullptr;
+        }
 
         // get transform
-        Il2CppObject* prefabTransform = *il2cpp_utils::RunMethod(go, "get_transform");
-        Il2CppObject* prefabParent = *il2cpp_utils::RunMethod(prefabTransform, "get_parent");
+        Transform* prefabParent = prefab->get_transform()->get_parent();
         
         //duplicate prefab GO
-        Il2CppObject* newKey = *il2cpp_utils::RunMethod("UnityEngine", "Object", "Instantiate", prefab);
+        GameObject* newKey = UnityEngine::Object::Instantiate(prefab);
         
         // get transform
-        Il2CppObject* newKeyTransform = *il2cpp_utils::RunMethod(newKey, "get_transform");
+        Transform* newKeyTransform = newKey->get_transform();
         
         // set parent to prefab parent
-        il2cpp_utils::RunMethod(newKeyTransform, "SetParent", prefabParent, false);
+        newKeyTransform->SetParent(prefabParent, false);
 
         // re get transform so it's definitely tthe right one
-        newKeyTransform = *il2cpp_utils::RunMethod(newKey, "get_transform");
+        newKeyTransform = newKey->get_transform();
 
         // get localpos
-        Vector3 pos = *il2cpp_utils::RunMethod<Vector3>(newKeyTransform, "get_localPosition");
+        Vector3 pos = newKeyTransform->get_localPosition();
 
         // update local pos
         pos.x += offset.x;
@@ -189,43 +199,37 @@ namespace GorillaUI
         pos.z += offset.z;
 
         // set local pos
-        il2cpp_utils::RunMethod(newKeyTransform, "set_localPosition", pos);
-        
-        // get pos
-        pos = *il2cpp_utils::RunMethod<Vector3>(newKeyTransform, "get_position");
+        newKeyTransform->set_localPosition(pos);
         
         // set name
-        il2cpp_utils::RunMethod(newKey, "set_name", il2cpp_utils::createcsstr(goName));
+        newKey->set_name(il2cpp_utils::createcsstr(goName));
         
         // add custom key component
-        static std::vector<Il2CppClass*> klass = {classof(GorillaUI::Components::GorillaKeyboardButton*)};
-        GorillaKeyboardButton* customKeyboardKey = *il2cpp_utils::RunGenericMethod<GorillaKeyboardButton*>(newKey, "GetComponent", klass);
-
-        return customKeyboardKey;
+        return newKey->GetComponent<GorillaUI::Components::GorillaKeyboardButton*>();
     }
 
-    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(Il2CppObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key)
+    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(GameObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key)
     {
-        GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
+        GorillaUI::Components::GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
         customKeyboardKey->Init(this, key);
         return customKeyboardKey;
     }
 
-    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(Il2CppObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key, std::string label)
+    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(GameObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key, std::string label)
     {
-        GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
+        GorillaUI::Components::GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
         customKeyboardKey->Init(this, key, label);
         return customKeyboardKey;
     }
 
-    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(Il2CppObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key, std::string label, Color color)
+    GorillaUI::Components::GorillaKeyboardButton* CustomComputer::CreateKey(GameObject* prefab, std::string goName, Vector3 Offset, EKeyboardKey key, std::string label, Color color)
     {
-        GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
+        GorillaUI::Components::GorillaKeyboardButton* customKeyboardKey = CreateKeyNoInit(prefab, goName, Offset, key);
         customKeyboardKey->Init(this, key, label, color);
         return customKeyboardKey;
     }
 
-    void CustomComputer::PressButton(GorillaKeyboardButton* button)
+    void CustomComputer::PressButton(GorillaUI::Components::GorillaKeyboardButton* button)
     {
         if (activeViewManager) 
         {
@@ -239,5 +243,4 @@ namespace GorillaUI
     {
         return instance;
     }
-
 }

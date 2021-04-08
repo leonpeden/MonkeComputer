@@ -1,10 +1,14 @@
 #include "GorillaUI.hpp"
 #include "typedefs.h"
 
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Object.hpp"
+
 extern Logger& getLogger();
 extern void loadlib();
 bool loaded = false;
 
+using namespace UnityEngine;
 namespace GorillaUI
 {
     static Vector3 zero = {0.0f, 0.0f, 0.0f};
@@ -13,9 +17,9 @@ namespace GorillaUI
     Components::ViewManager* CreateViewManager(Il2CppClass* klass)
     {
         getLogger().info("Creating View Manager %s::%s!", klass->namespaze, klass->name);
-        Il2CppObject* go = CRASH_UNLESS(il2cpp_utils::New(il2cpp_utils::GetClassFromName("UnityEngine", "GameObject")));
-        il2cpp_utils::RunMethod(go, "DontDestroyOnLoad", go);
-        Components::ViewManager* result = *il2cpp_utils::RunGenericMethod<Components::ViewManager*>(go, "AddComponent", std::vector<Il2CppClass*>{klass});
+        GameObject* go = GameObject::New_ctor();
+        Object::DontDestroyOnLoad(go);
+        Components::ViewManager* result = reinterpret_cast<Components::ViewManager*>(go->AddComponent(il2cpp_utils::GetSystemType(klass)));
         result->activatedBefore = false;
         return result;
     }
@@ -24,11 +28,10 @@ namespace GorillaUI
     {
         getLogger().info("Creating View %s::%s!", klass->namespaze, klass->name);
         
-        Il2CppObject* go = *il2cpp_utils::New(il2cpp_utils::GetClassFromName("UnityEngine", "GameObject"));
-        
-        il2cpp_utils::RunMethod(go, "DontDestroyOnLoad", go);
+        GameObject* go = GameObject::New_ctor();
+        Object::DontDestroyOnLoad(go);
 
-        Components::View* result = *il2cpp_utils::RunGenericMethod<Components::View*>(go, "AddComponent", std::vector<Il2CppClass*>{klass});
+        Components::View* result = reinterpret_cast<Components::View*>(go->AddComponent(il2cpp_utils::GetSystemType(klass)));
         result->activatedBefore = false;
         return result;
     }

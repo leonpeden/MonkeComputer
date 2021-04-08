@@ -5,6 +5,8 @@
 static ModInfo modInfo = {ID, VERSION};
 extern Logger& getLogger();
 
+using namespace UnityEngine;
+
 config_t config;
 Configuration& getConfig()
 {

@@ -4,7 +4,7 @@
 #include "beatsaber-hook/shared/utils/utils.h"
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 
-DEFINE_CLASS(GorillaUI::MainViewManager);
+DEFINE_TYPE(GorillaUI::MainViewManager);
 
 using namespace GorillaUI::Components;
 

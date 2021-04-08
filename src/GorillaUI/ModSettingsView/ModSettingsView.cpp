@@ -5,7 +5,7 @@
 #include "Helpers/PageHelper.hpp"
 #include "Helpers/SelectionHelper.hpp"
 
-DEFINE_CLASS(GorillaUI::ModSettingsView);
+DEFINE_TYPE(GorillaUI::ModSettingsView);
 
 extern Logger& getLogger();
 

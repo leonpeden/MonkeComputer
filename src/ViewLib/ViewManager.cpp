@@ -5,9 +5,11 @@
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 
-DEFINE_CLASS(GorillaUI::Components::ViewManager);
+DEFINE_TYPE(GorillaUI::Components::ViewManager);
 
 extern Logger& getLogger();
+
+using namespace UnityEngine;
 
 namespace GorillaUI::Components
 {
@@ -34,7 +36,6 @@ namespace GorillaUI::Components
    
     void ViewManager::PresentViewManager(GorillaUI::Components::ViewManager* manager)
     {
-        static Vector3 zero = {0.0f, 0.0f, 0.0f};
         childViewManager = manager;
         manager->parentViewManager = this;
         manager->computer = computer;
@@ -60,15 +61,5 @@ namespace GorillaUI::Components
         activeView = view;
         activeView->Activate();
         CustomComputer::Redraw();
-    }
-
-    Il2CppObject* ViewManager::transform()
-    {
-        return *il2cpp_utils::RunMethod(this, "get_transform");
-    }
-
-    Il2CppObject* ViewManager::gameObject()
-    {
-        return *il2cpp_utils::RunMethod(this, "get_gameObject");
     }
 }

@@ -8,7 +8,7 @@
 
 #include "GorillaUI.hpp"
 
-DEFINE_CLASS(GorillaUI::BaseGameViewManager);
+DEFINE_TYPE(GorillaUI::BaseGameViewManager);
 
 namespace GorillaUI
 {

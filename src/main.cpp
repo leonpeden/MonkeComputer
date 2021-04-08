@@ -37,10 +37,13 @@
 
 #include "config.hpp"
 
+#include "UnityEngine/GameObject.hpp"
+#include "GlobalNamespace/GorillaComputer.hpp"
+
 using namespace GorillaUI;
 using namespace GorillaUI::Components;
 
-ModInfo modInfo;
+ModInfo modInfo = {ID, VERSION};
 
 Logger& getLogger()
 {
@@ -52,61 +55,55 @@ Logger& getLogger()
 #define ERROR(value...) getLogger().error(value)
 #define run(value...) CRASH_UNLESS(il2cpp_utils::RunMethod(value))
 
-MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, Il2CppObject* self)
+using namespace UnityEngine;
+using namespace GlobalNamespace;
+
+MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, GorillaComputer* self)
 {
     GorillaComputer_Start(self);
 
-    Il2CppObject* computerGO = *il2cpp_utils::RunMethod(self, "get_gameObject");
-    CustomComputer* computer = *il2cpp_utils::RunGenericMethod<CustomComputer*>(computerGO, "AddComponent", std::vector<Il2CppClass*>{classof(GorillaUI::CustomComputer*)});
+    GameObject* computerGO = self->get_gameObject();
+    CustomComputer* computer = computerGO->AddComponent<CustomComputer*>();
     computer->Init(CreateView<MainView*>());
 }
 
-MAKE_HOOK_OFFSETLESS(GorillaComputer_CheckAutoBanList, bool, Il2CppObject* self, Il2CppString* nameToCheck)
+MAKE_HOOK_OFFSETLESS(GorillaComputer_CheckAutoBanList, bool, GorillaComputer* self, Il2CppString* nameToCheck)
 {   
-    Array<Il2CppString*>* anywhereTwoWeek = *il2cpp_utils::GetFieldValue<Array<Il2CppString*>*>(self, "anywhereTwoWeek");
-    Array<Il2CppString*>* anywhereOneWeek = *il2cpp_utils::GetFieldValue<Array<Il2CppString*>*>(self, "anywhereOneWeek");
-    Array<Il2CppString*>* exactOneWeek = *il2cpp_utils::GetFieldValue<Array<Il2CppString*>*>(self, "exactOneWeek");
-    
     INFO("Anywhere Two Week Ban List: ");
-    for (int i = 0; i < anywhereTwoWeek->Length(); i++)
+    for (int i = 0; i < self->anywhereTwoWeek->Length(); i++)
     {
-        std::string name = to_utf8(csstrtostr(anywhereTwoWeek->values[i]));
+        std::string name = to_utf8(csstrtostr(self->anywhereTwoWeek->values[i]));
         INFO("\t%s", name.c_str());
     }
 
     INFO("Anywhere One Week Ban List: ");
-    for (int i = 0; i < anywhereOneWeek->Length(); i++)
+    for (int i = 0; i < self->anywhereOneWeek->Length(); i++)
     {
-        std::string name = to_utf8(csstrtostr(anywhereOneWeek->values[i]));
+        std::string name = to_utf8(csstrtostr(self->anywhereOneWeek->values[i]));
         INFO("\t%s", name.c_str());
     }
 
     INFO("Exact One Week Ban List: ");
-    for (int i = 0; i < exactOneWeek->Length(); i++)
+    for (int i = 0; i < self->exactOneWeek->Length(); i++)
     {
-        std::string name = to_utf8(csstrtostr(exactOneWeek->values[i]));
+        std::string name = to_utf8(csstrtostr(self->exactOneWeek->values[i]));
         INFO("\t%s", name.c_str());
     }
 
     return GorillaComputer_CheckAutoBanList(self, nameToCheck);
 }
 
-MAKE_HOOK_OFFSETLESS(GorillaComputer_BanMe, void, Il2CppObject* self, int hours, Il2CppString* nameToCheck)
+MAKE_HOOK_OFFSETLESS(GorillaComputer_BanMe, void, GorillaComputer* self, int hours, Il2CppString* nameToCheck)
 {
     std::string name = to_utf8(csstrtostr(nameToCheck));
     INFO("Player Tried setting name %s, but a ban of %d hours was prevented", name.c_str(), hours);
 }
 
-/*
 extern "C" void setup(ModInfo& info)
 {
     info.id = ID;
     info.version = VERSION;
-    modInfo = info;
-
-    INFO("Setup!");
 }
-*/
 
 void loadlib()
 {
@@ -117,8 +114,9 @@ void loadlib()
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_CheckAutoBanList, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "CheckAutoBanList", 1));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_BanMe, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "BanMe", 2));
+    
     using namespace GorillaUI::Components;
-    custom_types::Register::RegisterTypes<CustomComputer, View, ViewManager, GorillaKeyboardButton>();
+    custom_types::Register::RegisterTypes<CustomComputer, View, ViewManager, GorillaUI::Components::GorillaKeyboardButton>();
     custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView, DetailView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
 

@@ -5,9 +5,12 @@
 #include "GorillaUI/BaseGameInterface.hpp"
 #include "Helpers/SelectionHelper.hpp"
 
-DEFINE_CLASS(GorillaUI::ColorChangeView);
+
+DEFINE_TYPE(GorillaUI::ColorChangeView);
 
 extern Logger& getLogger();
+
+using namespace UnityEngine;
 
 namespace GorillaUI
 {

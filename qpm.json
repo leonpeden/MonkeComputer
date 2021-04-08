@@ -7,9 +7,9 @@
     "version": "1.1.0",
     "url": "https://github.com/RedBrumbler/MonkeComputer",
     "additionalData": {
-        "overrideSoName": "libmonkecomputer.so",
-        "branchName": "version-v1.1.0",
-        "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.1.0/libmonkecomputer.so"
+      "overrideSoName": "libmonkecomputer.so",
+      "branchName": "version-v1.1.0",
+      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.1.0/libmonkecomputer.so"
     }
   },
   "dependencies": [
@@ -29,6 +29,11 @@
     },
     {
       "id": "quest-cosmetic-loader",
+      "versionRange": "*",
+      "additionalData": {}
+    },
+    {
+      "id": "monkecodegen",
       "versionRange": "*",
       "additionalData": {}
     }

@@ -4,7 +4,9 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
-DEFINE_CLASS(GorillaUI::CustomRoomView);
+#include "UnityEngine/Time.hpp"
+
+DEFINE_TYPE(GorillaUI::CustomRoomView);
 
 extern Logger& getLogger();
 
@@ -14,7 +16,7 @@ namespace GorillaUI
     {
         if (!textInputHandler) textInputHandler = new UITextInputHandler(EKeyboardKey::Enter, true);
         if (!optionInputHandler) optionInputHandler = new UIOptionInputHandler(EKeyboardKey::Enter, false);
-        lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+        lastUpdatedTime = UnityEngine::Time::get_time();
     }
 
     void CustomRoomView::DidActivate(bool firstActivation)
@@ -23,17 +25,17 @@ namespace GorillaUI
         textInputHandler->textCallback = fun;
         textInputHandler->text = BaseGameInterface::Room::get_roomID();
         Redraw();
-        lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+        lastUpdatedTime = UnityEngine::Time::get_time();
     }
 
     void CustomRoomView::Update()
     {
-        float time = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+        float time = UnityEngine::Time::get_time();
         //bool connected = BaseGameInterface::Room::get_isConnectedToMaster();
         if (time > (lastUpdatedTime + 1.0f))// && connected)
         {
             Redraw();
-            lastUpdatedTime = *il2cpp_utils::RunMethod<float>("UnityEngine", "Time", "get_time");
+            lastUpdatedTime = UnityEngine::Time::get_time();
         }
         /*
         else

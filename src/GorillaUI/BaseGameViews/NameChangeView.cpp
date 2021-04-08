@@ -4,7 +4,7 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
-DEFINE_CLASS(GorillaUI::NameChangeView);
+DEFINE_TYPE(GorillaUI::NameChangeView);
 
 extern Logger& getLogger();
 

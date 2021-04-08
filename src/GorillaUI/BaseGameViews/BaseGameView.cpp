@@ -12,7 +12,7 @@
 #include "Helpers/SelectionHelper.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
-DEFINE_CLASS(GorillaUI::BaseGameView);
+DEFINE_TYPE(GorillaUI::BaseGameView);
 
 extern Logger& getLogger();
 

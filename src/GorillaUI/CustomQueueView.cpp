@@ -4,7 +4,7 @@
 #include "Helpers/SelectionHelper.hpp"
 #include "ViewLib/CustomComputer.hpp"
 
-DEFINE_CLASS(GorillaUI::CustomQueueView);
+DEFINE_TYPE(GorillaUI::CustomQueueView);
 
 
 namespace GorillaUI

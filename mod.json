@@ -3,19 +3,25 @@
     "name": "Monke Computer",
     "id": "MonkeComputer",
     "author": "RedBrumbler",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "packageId": "com.AnotherAxiom.GorillaTag",
     "packageVersion": "1.0.4",
     "type": "Gameplay",
     "isLibrary": true,
+    "dependencies": [
+        {
+            "id": "monkecodegen",
+            "version": "^0.2.2",
+            "downloadIfMissing": "https://github.com/RedBrumbler/MonkeCodegen/releases/latest/download/MonkeCodegen.qmod"
+        }
+    ],
     "modFiles": [
     ],
     "libraryFiles": [
         "libmonkecomputer.so",
-        "libbeatsaber-hook_1_2_3.so",
-        "libbeatsaber-hook_1_2_4.so",
+        "libbeatsaber-hook_1_2_6.so",
         "libcustom-types.so",
-        "libquest-cosmetic-loader_0_1_1.so",
+        "libquest-cosmetic-loader_0_1_2.so",
         "libzip.so"
     ],
     "fileCopies": [

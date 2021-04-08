@@ -2,6 +2,7 @@
 
 #include "custom-types/shared/macros.hpp"
 #include <string>
+#include "UnityEngine/MonoBehaviour.hpp"
 
 namespace GorillaUI
 {
@@ -13,10 +14,10 @@ namespace GorillaUI
     }
 }
 
-DECLARE_CLASS(GorillaUI::Components, View, "UnityEngine", "MonoBehaviour", sizeof(Il2CppObject) + sizeof(void*) * 2 + sizeof(std::string), 
+DECLARE_CLASS_CODEGEN(GorillaUI::Components, View, UnityEngine::MonoBehaviour, 
     DECLARE_METHOD(void, Activate);
     DECLARE_METHOD(void, Deactivate);
-    DECLARE_INSTANCE_FIELD_DEFAULT(bool, activatedBefore, false);
+    DECLARE_INSTANCE_FIELD(bool, activatedBefore);
         
     public:
         std::string text = "";

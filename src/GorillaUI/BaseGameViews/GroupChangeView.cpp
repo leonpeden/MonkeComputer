@@ -3,7 +3,7 @@
 #include "Helpers/SelectionHelper.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
-DEFINE_CLASS(GorillaUI::GroupChangeView);
+DEFINE_TYPE(GorillaUI::GroupChangeView);
 
 extern Logger& getLogger();
 

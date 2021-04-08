@@ -14,7 +14,7 @@
         "d:/android-ndk-r21-windows-x86_64/android-ndk-r21/**",
         "${workspaceFolder}/shared",
         "${workspaceFolder}/extern",
-        "${workspaceFolder}/extern/codegen/include/**"
+        "${workspaceFolder}/extern/monkecodegen/include/**"
       ],
       "name": "Quest",
       "cStandard": "c11",

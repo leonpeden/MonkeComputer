@@ -1,22 +1,28 @@
 #pragma once
 #include "beatsaber-hook/shared/utils/typedefs.h"
+#include "beatsaber-hook/shared/utils/typedefs-wrappers.hpp"
 #include "../typedefs.h"
+
+#include "UnityEngine/UI/Text.hpp"
+#include "UnityEngine/Transform.hpp"
+#include "UnityEngine/Renderer.hpp"
+#include "UnityEngine/Material.hpp"
 
 namespace GorillaUI
 {
     class CustomScreenInfo
     {
         public:
-            Il2CppObject* text;
-            Il2CppObject* transform;
-            Il2CppObject* renderer;
-            Array<Il2CppObject*>* materials;
+            UnityEngine::UI::Text* text = nullptr;
+            UnityEngine::Transform* transform = nullptr;
+            UnityEngine::Renderer* renderer = nullptr;
+            Array<UnityEngine::Material*>* materials = nullptr;
 
             void set_fontSize(int size);
             int get_fontSize();
 
-            void set_color(Color color);
-            Color get_color();
+            void set_color(UnityEngine::Color color);
+            UnityEngine::Color get_color();
 
             void set_text(std::string newText);
             std::string get_text();

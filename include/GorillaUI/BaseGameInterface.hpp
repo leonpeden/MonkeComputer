@@ -2,6 +2,8 @@
 #include <string>
 #include "typedefs.h"
 
+#include "UnityEngine/Color.hpp"
+
 namespace GorillaUI::BaseGameInterface
 {
     void SetColor(float r, float g, float b);
@@ -31,7 +33,7 @@ namespace GorillaUI::BaseGameInterface
 
     namespace PlayerColor
     {
-        Color get_color();
+        UnityEngine::Color get_color();
     }
 
     namespace Name

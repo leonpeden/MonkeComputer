@@ -2,12 +2,16 @@
 #include "ViewLib/ViewManager.hpp"
 #include <thread>
 
-DEFINE_CLASS(GorillaUI::Components::GorillaKeyboardButton);
+#include "UnityEngine/Color.hpp"
+#include "UnityEngine/MeshRenderer.hpp"
+
+DEFINE_TYPE(GorillaUI::Components::GorillaKeyboardButton);
 
 #define KEY_BUMP_AMOUNT 0.2f
 #define PRESS_COOLDOWN 150
 
-static const Color pressedColor = {0.5f, 0.5f, 0.5f};
+using namespace UnityEngine;
+static const UnityEngine::Color pressedColor = {0.5f, 0.5f, 0.5f};
 
 extern Logger& getLogger();
 
@@ -15,11 +19,10 @@ namespace GorillaUI::Components
 {
     void GorillaKeyboardButton::Awake()
     {
-        il2cpp_utils::RunMethod(this, "set_enabled", false);
-        Il2CppObject* meshRenderer = *il2cpp_utils::RunGenericMethod(this, "GetComponent", std::vector<Il2CppClass*>{il2cpp_utils::GetClassFromName("UnityEngine", "MeshRenderer")});
-        material = *il2cpp_utils::RunMethod(meshRenderer, "get_material");
-    
-        originalColor = *il2cpp_utils::RunMethod<Color>(material, "get_color");
+        set_enabled(false);
+        MeshRenderer* meshRenderer = this->GetComponent<MeshRenderer*>();
+        material = meshRenderer->get_material();
+        originalColor = material->get_color();
     }
 
     void GorillaKeyboardButton::Init(GorillaUI::CustomComputer* computer, EKeyboardKey key)
@@ -65,7 +68,7 @@ namespace GorillaUI::Components
         il2cpp_utils::RunMethod(material, "set_color", originalColor);
     }
 
-    void GorillaKeyboardButton::OnTriggerEnter(Il2CppObject* collider)
+    void GorillaKeyboardButton::OnTriggerEnter(Collider* collider)
     {
         BumpIn();
         if (isOnCooldown) return;
@@ -95,7 +98,7 @@ namespace GorillaUI::Components
         cooldown.detach();
     }
 
-    void GorillaKeyboardButton::OnTriggerExit(Il2CppObject* collider)
+    void GorillaKeyboardButton::OnTriggerExit(Collider* collider)
     {
         BumpOut();
     }

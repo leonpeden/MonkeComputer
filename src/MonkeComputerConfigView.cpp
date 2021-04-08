@@ -5,7 +5,7 @@
 #include "GorillaUI/BaseGameInterface.hpp"
 #include "config.hpp"
 #include "Helpers/SelectionHelper.hpp"
-DEFINE_CLASS(GorillaUI::MonkeComputerConfigView);
+DEFINE_TYPE(GorillaUI::MonkeComputerConfigView);
 
 extern Logger& getLogger();
 

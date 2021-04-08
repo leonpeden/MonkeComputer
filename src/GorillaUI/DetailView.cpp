@@ -3,7 +3,7 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
-DEFINE_CLASS(GorillaUI::DetailView);
+DEFINE_TYPE(GorillaUI::DetailView);
 
 extern Logger& getLogger();
 

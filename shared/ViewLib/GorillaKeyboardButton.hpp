@@ -5,29 +5,33 @@
 #include "../EKeyboardKey.hpp"
 #include "../typedefs.h"
 
+#include "UnityEngine/Material.hpp"
+#include "UnityEngine/Color.hpp"
+#include "UnityEngine/Collider.hpp"
+#include "GlobalNamespace/GorillaTriggerBox.hpp"
 namespace GorillaUI
 {
     class CustomComputer;   
 }
-DECLARE_CLASS(GorillaUI::Components, GorillaKeyboardButton, "", "GorillaTriggerBox", sizeof(Il2CppObject) + sizeof(void*) * 2 + sizeof(int) + sizeof(float) * 3,
-    DECLARE_METHOD(void, OnTriggerEnter, Il2CppObject* collider);
-    DECLARE_METHOD(void, OnTriggerExit, Il2CppObject* collider);
+DECLARE_CLASS_CODEGEN(GorillaUI::Components, GorillaKeyboardButton, GlobalNamespace::GorillaTriggerBox,
+    DECLARE_METHOD(void, OnTriggerEnter, UnityEngine::Collider* collider);
+    DECLARE_METHOD(void, OnTriggerExit, UnityEngine::Collider* collider);
     DECLARE_METHOD(void, Awake);
     DECLARE_METHOD(void, BumpIn);
     DECLARE_METHOD(void, BumpOut);
     DECLARE_INSTANCE_FIELD(bool, isOnCooldown);
     DECLARE_INSTANCE_FIELD(bool, functionKey);
-    DECLARE_INSTANCE_FIELD(Il2CppObject*, material);
+    DECLARE_INSTANCE_FIELD(UnityEngine::Material*, material);
     DECLARE_INSTANCE_FIELD(float, pressTime);
     
     public:
         EKeyboardKey key;
         void Init(GorillaUI::CustomComputer* computer, EKeyboardKey key);
         void Init(GorillaUI::CustomComputer* computer, EKeyboardKey key, std::string text);
-        void Init(GorillaUI::CustomComputer* computer, EKeyboardKey key, std::string text, Color buttonColor);
+        void Init(GorillaUI::CustomComputer* computer, EKeyboardKey key, std::string text, UnityEngine::Color buttonColor);
 
     private:
-        Color originalColor;
+        UnityEngine::Color originalColor;
         GorillaUI::CustomComputer* computer;
 
     REGISTER_FUNCTION(GorillaKeyboardButton,

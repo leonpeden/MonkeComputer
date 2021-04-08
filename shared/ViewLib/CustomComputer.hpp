@@ -12,6 +12,13 @@
 
 #include "../typedefs.h"
 
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Vector3.hpp"
+#include "UnityEngine/Color.hpp"
+
+#include "UnityEngine/MonoBehaviour.hpp"
+#include "GlobalNamespace/GorillaComputer.hpp"
+
 namespace GorillaUI::Components {
     class GorillaKeyboardButton;
     class ViewManager;
@@ -20,19 +27,19 @@ namespace GorillaUI::Components {
 
 using keymap = std::map<GorillaUI::EKeyboardKey, GorillaUI::Components::GorillaKeyboardButton*>;
 
-DECLARE_CLASS(GorillaUI, CustomComputer, "UnityEngine", "MonoBehaviour", sizeof(Il2CppObject) + sizeof(void*),
+DECLARE_CLASS_CODEGEN(GorillaUI, CustomComputer, UnityEngine::MonoBehaviour,
     DECLARE_METHOD(void, PressButton, GorillaUI::Components::GorillaKeyboardButton* button);
     DECLARE_METHOD(void, ReplaceKeys);
     DECLARE_METHOD(static void, Redraw);
     DECLARE_METHOD(void, SetBG, float r, float g, float b);
     DECLARE_INSTANCE_FIELD(bool, initialized);
-    DECLARE_INSTANCE_FIELD(Il2CppObject*, gorillaComputer);
+    DECLARE_INSTANCE_FIELD(GlobalNamespace::GorillaComputer*, gorillaComputer);
 
     private:
-        GorillaUI::Components::GorillaKeyboardButton* CreateKeyNoInit(Il2CppObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key);
-        GorillaUI::Components::GorillaKeyboardButton* CreateKey(Il2CppObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key);
-        GorillaUI::Components::GorillaKeyboardButton* CreateKey(Il2CppObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key, std::string label);
-        GorillaUI::Components::GorillaKeyboardButton* CreateKey(Il2CppObject* prefab, std::string goName, Vector3 offset, EKeyboardKey key, std::string label, Color color);
+        GorillaUI::Components::GorillaKeyboardButton* CreateKeyNoInit(UnityEngine::GameObject* prefab, std::string goName, UnityEngine::Vector3 offset, EKeyboardKey key);
+        GorillaUI::Components::GorillaKeyboardButton* CreateKey(UnityEngine::GameObject* prefab, std::string goName, UnityEngine::Vector3 offset, EKeyboardKey key);
+        GorillaUI::Components::GorillaKeyboardButton* CreateKey(UnityEngine::GameObject* prefab, std::string goName, UnityEngine::Vector3 offset, EKeyboardKey key, std::string label);
+        GorillaUI::Components::GorillaKeyboardButton* CreateKey(UnityEngine::GameObject* prefab, std::string goName, UnityEngine::Vector3 offset, EKeyboardKey key, std::string label, UnityEngine::Color color);
         CustomScreenInfo CreateMonitor();
 
         keymap keys;

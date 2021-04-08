@@ -1,7 +1,8 @@
 #pragma once
-#include "typedefs.h"
+#include "UnityEngine/Color.hpp"
+
 struct config_t {
-    Color screenColor = {0.0f, 0.0f, 0.0f};
+    UnityEngine::Color screenColor = {0.0f, 0.0f, 0.0f};
 };
 
 extern config_t config;

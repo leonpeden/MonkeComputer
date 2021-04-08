@@ -4,7 +4,7 @@
 #include "ViewLib/CustomComputer.hpp"
 #include "Helpers/SelectionHelper.hpp"
 #include "Helpers/PageHelper.hpp"
-DEFINE_CLASS(GorillaUI::MainView);
+DEFINE_TYPE(GorillaUI::MainView);
 
 extern Logger& getLogger();
 
