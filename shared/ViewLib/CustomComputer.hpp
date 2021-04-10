@@ -51,7 +51,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, CustomComputer, UnityEngine::MonoBehaviour,
 
         static CustomComputer* get_instance();
 
-    REGISTER_FUNCTION(CustomComputer,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(PressButton);
         REGISTER_METHOD(ReplaceKeys);
         REGISTER_METHOD(SetBG);

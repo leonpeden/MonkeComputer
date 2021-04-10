@@ -23,7 +23,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI::Components, View, UnityEngine::MonoBehaviour,
         std::string text = "";
         GorillaUI::CustomComputer* computer = nullptr;
 
-    REGISTER_FUNCTION(View,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Activate);
         REGISTER_METHOD(Deactivate);
         REGISTER_FIELD(activatedBefore);

@@ -12,7 +12,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, ModSettingsViewManager, GorillaUI::Components::
     
     DECLARE_INSTANCE_FIELD(Components::View*, listView);
 
-    REGISTER_FUNCTION(ModSettingsViewManager,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(NotifyOfKeyPress);
         REGISTER_METHOD(BackButtonWasPressed);

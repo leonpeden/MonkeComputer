@@ -34,7 +34,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI::Components, GorillaKeyboardButton, GlobalNamesp
         UnityEngine::Color originalColor;
         GorillaUI::CustomComputer* computer;
 
-    REGISTER_FUNCTION(GorillaKeyboardButton,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(OnTriggerEnter);
         REGISTER_METHOD(OnTriggerExit);
         REGISTER_METHOD(Awake);

@@ -17,7 +17,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, CustomQueueView, GorillaUI::Components::View,
     DECLARE_METHOD(void, OnKeyPressed, int key);
     DECLARE_INSTANCE_FIELD(void*, selectionHandler);
 
-    REGISTER_FUNCTION(CustomQueueView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(JoinQueue);
         REGISTER_METHOD(DidActivate);

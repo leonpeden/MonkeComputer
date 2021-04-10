@@ -12,7 +12,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameViewManager, GorillaUI::Components::Vie
     
     DECLARE_INSTANCE_FIELD(Components::View*, baseGameView);
 
-    REGISTER_FUNCTION(BaseGameViewManager,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(NotifyOfKeyPress);
         REGISTER_METHOD(BackButtonWasPressed);

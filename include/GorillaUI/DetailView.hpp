@@ -11,7 +11,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, DetailView, GorillaUI::Components::View,
     DECLARE_METHOD(void, DrawHeader);
     DECLARE_METHOD(void, DrawDetails);
     
-    REGISTER_FUNCTION(DetailView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(Redraw);
         REGISTER_METHOD(DrawHeader);

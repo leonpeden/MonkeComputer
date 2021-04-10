@@ -18,7 +18,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, ModSettingsView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::UISelectionHandler* pageSelectionHandler = nullptr;
     
-    REGISTER_FUNCTION(ModSettingsView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(ShowModView);
         REGISTER_METHOD(DidActivate);

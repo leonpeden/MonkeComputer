@@ -16,7 +16,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MicChangeView, GorillaUI::Components::View,
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
 
-    REGISTER_FUNCTION(MicChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(ChangeMic);

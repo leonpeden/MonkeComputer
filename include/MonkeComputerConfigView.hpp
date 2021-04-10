@@ -20,7 +20,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MonkeComputerConfigView, GorillaUI::Components:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::UINumberInputHandler* numberInputHandlers[3];
 
-    REGISTER_FUNCTION(MonkeComputerConfigView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(UpdateColor);

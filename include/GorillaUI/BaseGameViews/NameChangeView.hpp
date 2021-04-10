@@ -16,7 +16,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, NameChangeView, GorillaUI::Components::View,
         void EnterName(std::string code);
         GorillaUI::UITextInputHandler* textInputHandler = nullptr;
 
-    REGISTER_FUNCTION(NameChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(Redraw);

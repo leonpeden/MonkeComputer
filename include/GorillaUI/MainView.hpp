@@ -24,7 +24,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::UISelectionHandler* pageSelectionHandler = nullptr;
 
-    REGISTER_FUNCTION(MainView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(ShowView);
         REGISTER_METHOD(DidActivate);

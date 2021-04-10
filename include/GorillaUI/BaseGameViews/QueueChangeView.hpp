@@ -15,7 +15,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, QueueChangeView, GorillaUI::Components::View,
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
 
-    REGISTER_FUNCTION(QueueChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(Redraw);

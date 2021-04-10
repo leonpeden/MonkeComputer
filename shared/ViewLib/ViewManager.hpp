@@ -32,7 +32,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI::Components, ViewManager, UnityEngine::MonoBehav
         GorillaUI::Components::ViewManager* childViewManager = nullptr;
         GorillaUI::CustomComputer* computer = nullptr;
         
-    REGISTER_FUNCTION(ViewManager,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Activate);
         REGISTER_METHOD(Deactivate);
         REGISTER_METHOD(PresentViewManager);

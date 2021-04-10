@@ -24,7 +24,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         bool old = true;
     
-    REGISTER_FUNCTION(BaseGameView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(ShowView);
         REGISTER_METHOD(DidActivate);

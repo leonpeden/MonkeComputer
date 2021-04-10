@@ -18,7 +18,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, ColorChangeView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::UINumberInputHandler* numberInputHandlers[3];
 
-    REGISTER_FUNCTION(ColorChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(UpdateColor);

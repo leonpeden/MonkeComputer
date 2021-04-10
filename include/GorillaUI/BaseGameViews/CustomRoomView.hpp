@@ -19,7 +19,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, CustomRoomView, GorillaUI::Components::View,
         GorillaUI::UITextInputHandler* textInputHandler = nullptr;
         GorillaUI::UIOptionInputHandler* optionInputHandler = nullptr;
 
-    REGISTER_FUNCTION(CustomRoomView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(Redraw);

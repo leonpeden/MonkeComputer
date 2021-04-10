@@ -17,7 +17,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, GroupChangeView, GorillaUI::Components::View,
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
 
-    REGISTER_FUNCTION(GroupChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(Update);
         REGISTER_METHOD(DidActivate);

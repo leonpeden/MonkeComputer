@@ -11,7 +11,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, MainViewManager, GorillaUI::Components::ViewMan
     DECLARE_METHOD(void, BackButtonWasPressed, GorillaUI::Components::View* view);
     DECLARE_INSTANCE_FIELD(Components::View*, mainView);
 
-    REGISTER_FUNCTION(MainViewManager,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(NotifyOfKeyPress);
         REGISTER_METHOD(BackButtonWasPressed);

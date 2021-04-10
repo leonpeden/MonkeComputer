@@ -17,7 +17,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, TurnChangeView, GorillaUI::Components::View,
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
         GorillaUI::UISelectionHandler* turnValueHandler = nullptr;
 
-    REGISTER_FUNCTION(TurnChangeView,
+    REGISTER_FUNCTION(
         REGISTER_METHOD(Awake);
         REGISTER_METHOD(DidActivate);
         REGISTER_METHOD(UpdateTurn);
