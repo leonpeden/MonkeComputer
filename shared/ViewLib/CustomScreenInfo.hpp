@@ -7,6 +7,7 @@
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/Renderer.hpp"
 #include "UnityEngine/Material.hpp"
+#include "UnityEngine/Texture2D.hpp"
 
 namespace GorillaUI
 {
@@ -26,5 +27,8 @@ namespace GorillaUI
 
             void set_text(std::string newText);
             std::string get_text();
+
+            void set_texture(UnityEngine::Texture2D* tex);
+            UnityEngine::Texture2D* get_texture();
     };
 }

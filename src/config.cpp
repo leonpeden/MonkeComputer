@@ -40,6 +40,7 @@ void SaveConfig()
     getConfig().config.SetObject();
     rapidjson::Document::AllocatorType& allocator = getConfig().config.GetAllocator();
     SaveScreenColor(allocator, getConfig().config);    
+    getConfig().config.AddMember("lastActiveBackground", rapidjson::Value(config.lastActiveBackground.c_str(), config.lastActiveBackground.size(), allocator), allocator);
     getConfig().Write();
     getLogger().info("Saved Configuration!");
 }
@@ -52,6 +53,11 @@ bool LoadConfig()
     
     if(doc.HasMember("screenColor")){
         LoadScreenColor(doc["screenColor"]);
+    }else{
+        foundEverything = false;
+    } 
+    if(doc.HasMember("lastActiveBackground")){
+        config.lastActiveBackground = doc["lastActiveBackground"].GetString();
     }else{
         foundEverything = false;
     } 

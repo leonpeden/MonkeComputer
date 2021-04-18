@@ -35,4 +35,17 @@ namespace GorillaUI
         Il2CppString* csString = text->get_text();
         return to_utf8(csstrtostr(csString));
     }
+
+    void CustomScreenInfo::set_texture(Texture2D* tex)
+    {
+        static Il2CppString* mainTex = il2cpp_utils::createcsstr("_MainTex");
+        Object::DestroyImmediate(get_texture());
+        materials->values[1]->SetTexture(mainTex, tex);
+    }
+
+    Texture2D* CustomScreenInfo::get_texture()
+    {
+        static Il2CppString* mainTex = il2cpp_utils::createcsstr("_MainTex");
+        return (Texture2D*)materials->values[1]->GetTexture(mainTex);
+    }
 }

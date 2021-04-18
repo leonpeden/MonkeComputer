@@ -225,7 +225,7 @@ namespace GorillaUI::BaseGameInterface
 
         gorillaComputer->turnType = turnTypeCS;
         gorillaComputer->turnValue = turnValue;
-        gorillaTurn->ChangeTurnMode(turnTypeCS, turnValue);
+        if (gorillaTurn) gorillaTurn->ChangeTurnMode(turnTypeCS, turnValue);
     }
 
     void InitColorState()
@@ -307,7 +307,7 @@ namespace GorillaUI::BaseGameInterface
         Photon::Realtime::Room* currentRoom = PhotonNetwork::get_CurrentRoom();
         bool isVisible = currentRoom ? currentRoom->get_IsVisible() : false;
 
-        bool flag = inRoom && !isVisible && (group == "FOREST" || group == "CAVE");
+        bool flag = inRoom && !isVisible && (group == "FOREST" || group == "CAVE" || group == "CANYON");
 
 		if (flag)
 		{
@@ -362,6 +362,11 @@ namespace GorillaUI::BaseGameInterface
 			{
 				GorillaNetworkJoinTrigger* caveMapTrigger = gorillaComputer->caveMapTrigger;
                 caveMapTrigger->ComputerJoin();
+			}
+            else if (group == "CANYON")
+			{
+				GorillaNetworkJoinTrigger* canyonMapTrigger = gorillaComputer->canyonMapTrigger;
+                canyonMapTrigger->ComputerJoin();
 			}
 		}
     }
@@ -516,6 +521,7 @@ namespace GorillaUI::BaseGameInterface
         int groupToIndex(std::string group)
         {
             if (group == "CAVE") return 1;
+            else if (group == "CANYON") return 2;
             else return 0;
         }
     }

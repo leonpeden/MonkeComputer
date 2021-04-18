@@ -15,6 +15,7 @@
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Vector3.hpp"
 #include "UnityEngine/Color.hpp"
+#include "UnityEngine/Texture2D.hpp"
 
 #include "UnityEngine/MonoBehaviour.hpp"
 #include "GlobalNamespace/GorillaComputer.hpp"
@@ -32,6 +33,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, CustomComputer, UnityEngine::MonoBehaviour,
     DECLARE_METHOD(void, ReplaceKeys);
     DECLARE_METHOD(static void, Redraw);
     DECLARE_METHOD(void, SetBG, float r, float g, float b);
+    DECLARE_METHOD(void, SetBGTex, UnityEngine::Texture2D* tex);
     DECLARE_INSTANCE_FIELD(bool, initialized);
     DECLARE_INSTANCE_FIELD(GlobalNamespace::GorillaComputer*, gorillaComputer);
 
@@ -55,6 +57,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, CustomComputer, UnityEngine::MonoBehaviour,
         REGISTER_METHOD(PressButton);
         REGISTER_METHOD(ReplaceKeys);
         REGISTER_METHOD(SetBG);
+        REGISTER_METHOD(SetBGTex);
         REGISTER_METHOD(Redraw);
         REGISTER_FIELD(gorillaComputer);
         REGISTER_FIELD(initialized);

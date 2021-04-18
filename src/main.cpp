@@ -40,6 +40,8 @@
 #include "UnityEngine/GameObject.hpp"
 #include "GlobalNamespace/GorillaComputer.hpp"
 
+#include "CustomBackgrounds/BackgroundsList.hpp"
+#include "CustomBackgrounds/BackgroundsView.hpp"
 using namespace GorillaUI;
 using namespace GorillaUI::Components;
 
@@ -109,7 +111,7 @@ void loadlib()
     INFO("Loading mod...");
     if (!LoadConfig())
             SaveConfig();
-            
+    BackgroundsList::Load();
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_CheckAutoBanList, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "CheckAutoBanList", 1));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_BanMe, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "BanMe", 2));
@@ -124,12 +126,15 @@ void loadlib()
 
     custom_types::Register::RegisterType<CustomQueueView>();
     custom_types::Register::RegisterType<MonkeComputerConfigView>();
+    custom_types::Register::RegisterType<BackgroundsView>();
+
     GorillaUI::Register::RegisterViewManager<BaseGameViewManager*>("Game Settings", "1.0.4");
     GorillaUI::Register::RegisterViewManager<ModSettingsViewManager*>("Mod Settings", VERSION);
     GorillaUI::Register::RegisterView<DetailView*>("Details", VERSION);
     GorillaUI::Register::RegisterView<CustomQueueView*>("Custom Queues", VERSION);
     
     GorillaUI::Register::RegisterSettingsView<MonkeComputerConfigView*>("Monke Computer", VERSION);
+    GorillaUI::Register::RegisterSettingsView<BackgroundsView*>("Custom Backgrounds", VERSION);
 
     CustomQueues::add_queue("MODDED", "Modded", "  <size=40>A Queue for modded players, outside of the normal public lobbies.\n    You can't really report anyone for having a mod here, but griefing\n    is still prohibited.\n</size>");
     INFO("Mod Loaded!");

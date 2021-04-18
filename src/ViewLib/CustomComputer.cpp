@@ -16,6 +16,7 @@
 #include "UnityEngine/Color.hpp"
 #include "UnityEngine/Vector3.hpp"
 
+#include "Utils/LoadUtils.hpp"
 DEFINE_TYPE(GorillaUI::CustomComputer);
 
 using namespace GorillaUI::Components;
@@ -92,20 +93,38 @@ namespace GorillaUI
         
         info.transform = newMonitorTransform;
         info.text = newMonitor->GetComponentInChildren<UnityEngine::UI::Text*>();
-        info.renderer = newMonitor->GetComponentInChildren<UnityEngine::MeshRenderer*>();
+        info.renderer = newMonitorTransform->Find(il2cpp_utils::createcsstr("Monitor"))->get_gameObject()->GetComponent<UnityEngine::MeshRenderer*>();
         info.materials = info.renderer->get_materials();
 
         info.set_color(config.screenColor);
         info.set_fontSize(80);
+        Texture2D* tex = LoadUtils::LoadTextureFromFile(config.lastActiveBackground);
+        if (!tex) 
+        {
+            getLogger().info("File was nullptr, setting white texture");
+            tex = Texture2D::get_whiteTexture();
+        }
+        info.set_texture(tex);
         
         return info;
     }
-
+    
     void CustomComputer::SetBG(float r, float g, float b)
     {
         screenInfo.set_color(Color(r, g, b));
         config.screenColor = {r, g, b};
         SaveConfig();
+    }
+
+    void CustomComputer::SetBGTex(Texture2D* tex)
+    {
+        if (!tex) 
+        {
+            getLogger().info("File was nullptr, setting white texture");
+            tex = Texture2D::get_whiteTexture();
+        }
+
+        screenInfo.set_texture(tex);
     }
     
     void CustomComputer::ReplaceKeys()

@@ -13,7 +13,7 @@ namespace GorillaUI
     {
         counter = 0;
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true);
-        selectionHandler->max = 2;
+        selectionHandler->max = 3;
 
         std::string group = BaseGameInterface::Group::get_group();
         selectionHandler->currentSelectionIndex = BaseGameInterface::Group::groupToIndex(group);
@@ -48,6 +48,9 @@ namespace GorillaUI
             case 1:
                 type = "CAVE";
                 break;
+            case 2:
+                type = "CANYON";
+                break;
             default:
                 break;
         }
@@ -76,7 +79,8 @@ namespace GorillaUI
 
         std::vector<std::string> groups = {
             "Forest",
-            "Cave"
+            "Cave",
+            "Canyon"
         };
         
         SelectionHelper::DrawSelection(groups, selectionHandler->currentSelectionIndex, text);

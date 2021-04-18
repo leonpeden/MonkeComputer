@@ -18,11 +18,7 @@ TARGET_ARCH_ABI := $(APP_ABI)
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-# Creating prebuilt for dependency: beatsaber-hook - version: 1.2.4
-include $(CLEAR_VARS)
-LOCAL_MODULE := 
-include $(CLEAR_VARS)
-# Creating prebuilt for dependency: custom-types - version: 0.8.2
+# Creating prebuilt for dependency: custom-types - version: 0.8.3
 include $(CLEAR_VARS)
 LOCAL_MODULE := custom-types
 LOCAL_EXPORT_C_INCLUDES := extern/custom-types
@@ -46,11 +42,11 @@ LOCAL_MODULE := zip
 LOCAL_EXPORT_C_INCLUDES := extern/zip
 LOCAL_SRC_FILES := extern/libzip.so
 include $(PREBUILT_SHARED_LIBRARY)
-# Creating prebuilt for dependency: monkecodegen - version: 0.2.3
+# Creating prebuilt for dependency: monkecodegen - version: 0.2.4
 include $(CLEAR_VARS)
-LOCAL_MODULE := monkecodegen_0_2_3
+LOCAL_MODULE := monkecodegen_0_2_4
 LOCAL_EXPORT_C_INCLUDES := extern/monkecodegen
-LOCAL_SRC_FILES := extern/libmonkecodegen_0_2_3.so
+LOCAL_SRC_FILES := extern/libmonkecodegen_0_2_4.so
 include $(PREBUILT_SHARED_LIBRARY)
 # Creating prebuilt for dependency: beatsaber-hook - version: 1.3.3
 include $(CLEAR_VARS)
@@ -73,8 +69,8 @@ LOCAL_SHARED_LIBRARIES += beatsaber-hook_1_3_3
 LOCAL_SHARED_LIBRARIES += custom-types
 LOCAL_SHARED_LIBRARIES += quest-cosmetic-loader_0_1_3
 LOCAL_SHARED_LIBRARIES += zip
-LOCAL_SHARED_LIBRARIES += monkecodegen_0_2_3
+LOCAL_SHARED_LIBRARIES += monkecodegen_0_2_4
 LOCAL_LDLIBS += -llog
-LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"MonkeComputer"' -DVERSION='"1.3.1"' -I'./shared' -I'./extern' -Wno-inaccessible-base -Wno-invalid-offsetof
+LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"MonkeComputer"' -DVERSION='"1.3.2"' -I'./shared' -I'./extern' -Wno-inaccessible-base -Wno-invalid-offsetof
 LOCAL_C_INCLUDES += ./include ./src
 include $(BUILD_SHARED_LIBRARY)
