@@ -1,5 +1,7 @@
 #include "Utils/LoadUtils.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
+#include <fstream>
+
 using namespace UnityEngine;
 
 extern Logger& getLogger();
@@ -18,10 +20,11 @@ namespace LoadUtils
         using LoadImage = function_ptr_t<unsigned int, Texture2D*, Array<uint8_t>*, bool>;
         static LoadImage loadImage = reinterpret_cast<LoadImage>(il2cpp_functions::resolve_icall("UnityEngine.ImageConversion::LoadImage"));
 
-        std::vector<char> charvector = readbytes(filePath);
-        std::vector<uint8_t>& bytevector = *reinterpret_cast<std::vector<uint8_t>*>(&charvector);
-        Array<uint8_t>* byteArray = il2cpp_utils::vectorToArray(bytevector);
-        loadImage(texture, byteArray, false);
+        std::ifstream instream(filePath, std::ios::in | std::ios::binary);
+        std::vector<uint8_t> data((std::istreambuf_iterator<char>(instream)), std::istreambuf_iterator<char>());
+        Array<uint8_t>* bytes = il2cpp_utils::vectorToArray(data);
+
+        loadImage(texture, bytes, false);
         Object::DontDestroyOnLoad(texture);
         return texture;
     }
