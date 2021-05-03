@@ -53,6 +53,9 @@ namespace GorillaUI::BaseGameInterface
 
         /// @brief players close enough to the pc for group transfer
         int get_collidingPlayers();
+
+        /// @brief count of players banned yesterday
+        int get_bannedPlayers();
     }
 
     namespace Mic

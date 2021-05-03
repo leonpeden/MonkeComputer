@@ -39,9 +39,19 @@
 
 #include "UnityEngine/GameObject.hpp"
 #include "GlobalNamespace/GorillaComputer.hpp"
+#include "PlayFab/PlayFabError.hpp"
+#include "System/Collections/Generic/Dictionary_2.hpp"
+#include "System/Collections/Generic/KeyValuePair_2.hpp"
+#include "System/DateTime.hpp"
+#include "System/TimeSpan.hpp"
+
+#include "GlobalNamespace/PlayFabAuthenticator.hpp"
 
 #include "CustomBackgrounds/BackgroundsList.hpp"
 #include "CustomBackgrounds/BackgroundsView.hpp"
+
+#include "BanManager.hpp"
+
 using namespace GorillaUI;
 using namespace GorillaUI::Components;
 
@@ -100,6 +110,83 @@ MAKE_HOOK_OFFSETLESS(GorillaComputer_BanMe, void, GorillaComputer* self, int hou
     INFO("Player Tried setting name %s, but a ban of %d hours was prevented", name.c_str(), hours);
 }
 
+MAKE_HOOK_OFFSETLESS(PlayFabAuthenticator_OnPlayFabError, void, GlobalNamespace::PlayFabAuthenticator* self, PlayFab::PlayFabError* obj)
+{
+    if (!obj || !obj->ErrorMessage) 
+    {
+        PlayFabAuthenticator_OnPlayFabError(self, obj);
+        return;
+    }
+    std::string error = to_utf8(csstrtostr(obj->ErrorMessage));
+
+    using DetailsEnumerator = System::Collections::Generic::Dictionary_2<Il2CppString*, System::Collections::Generic::List_1<Il2CppString*>*>::Enumerator;
+    using Details = System::Collections::Generic::KeyValuePair_2<Il2CppString*, List<Il2CppString*>*>;
+    using namespace System;
+    
+    bool isBanned = false;
+    std::string DisplayedMessage = "";
+    
+    // normal ban
+    if (error == "The account making this request is currently banned")
+    {
+        isBanned = true;
+
+        // C# enumeration, kinda weird innit
+        DetailsEnumerator enumerator = obj->ErrorDetails->GetEnumerator();
+        if (enumerator.MoveNext())
+        {
+            Details pair = enumerator.get_Current();
+            Il2CppString* firstCS = pair.get_Value()->items->values[0];
+            std::string first = firstCS ? to_utf8(csstrtostr(firstCS)) : "";
+            std::string reason = to_utf8(csstrtostr(pair.get_Key()));
+
+            // if not indefinite, so it will expirre within about 2 weeks
+            if (first != "Indefinite")
+            {   
+
+                DateTime end = DateTime::Parse(firstCS); 
+                TimeSpan time = end - DateTime::get_UtcNow();
+
+                int count = time.get_TotalHours() + 1;
+
+                DisplayedMessage += "You have been banned. You will not be able to play until the ban expires.\nReason: ";
+                DisplayedMessage += reason;
+                DisplayedMessage += string_format("\nHours Left: %d", count);
+            }
+            // infinte ban, this is so sad, alexa play despacito
+            else
+            {
+                DisplayedMessage += "You have been banned Indefinitely.\nReason: ";
+                DisplayedMessage += reason;
+            }
+        }
+    }
+    // ip ban
+    else if (error == "The IP making this request is currently banned")
+    {
+        isBanned = true;
+        DisplayedMessage = "<size=40>\nYour IP has been banned,\n due to the possibility of ban evasion nobody else\n from this IP will be able to connect until the ban expires.\n Only the banned user can be shown the reason and ban duration.\n</size>";
+    }
+
+    if (isBanned)
+    {
+        BanManager::set_displayMessage(DisplayedMessage);
+        
+        std::vector<ModEntry>& entries = Register::get_entries();
+        
+        for (auto& entry : entries)
+        {
+            if (entry.get_info().id == "Details")
+            {
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(entry.get_view());
+                break;
+            }
+        }
+    }
+    PlayFabAuthenticator_OnPlayFabError(self, obj);
+}
+
+
 extern "C" void setup(ModInfo& info)
 {
     info.id = ID;
@@ -115,6 +202,7 @@ void loadlib()
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_CheckAutoBanList, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "CheckAutoBanList", 1));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_BanMe, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "BanMe", 2));
+    INSTALL_HOOK_OFFSETLESS(getLogger(), PlayFabAuthenticator_OnPlayFabError, il2cpp_utils::FindMethodUnsafe("", "PlayFabAuthenticator", "OnPlayFabError", 1));
     
     using namespace GorillaUI::Components;
     custom_types::Register::RegisterTypes<CustomComputer, View, ViewManager, GorillaUI::Components::GorillaKeyboardButton>();

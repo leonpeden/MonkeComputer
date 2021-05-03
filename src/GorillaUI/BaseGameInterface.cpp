@@ -95,55 +95,27 @@ namespace GorillaUI::BaseGameInterface
         if (!playerName) playerName = il2cpp_utils::createcsstr("playerName", il2cpp_utils::StringType::Manual);
         PlayerPrefs::SetString(playerName, csName);
         PlayerPrefs::Save();
+
+        if (PhotonNetwork::get_InRoom())
+        {
+            
+            static Il2CppString* initializeNoobMaterial = il2cpp_utils::createcsstr("InitializeNoobMaterial", il2cpp_utils::StringType::Manual);
+
+            std::vector<float> floatVector = {};
+            floatVector.push_back(gorillaComputer->redValue);
+            floatVector.push_back(gorillaComputer->greenValue);
+            floatVector.push_back(gorillaComputer->blueValue);
+            Array<float>* floatArr = il2cpp_utils::vectorToArray(floatVector);
+            GlobalNamespace::GorillaTagger::_get__instance()->myVRRig->get_photonView()->RPC(initializeNoobMaterial, RpcTarget::All, floatArr);
+        }
         return true;
     }
 
     void Disconnect()
     {
-        GorillaComputer* gorillaComputer = GorillaComputer::_get_instance();
-        if (!gorillaComputer) return;
-
         if (PhotonNetwork::get_InRoom())
         {
-            PhotonNetworkController* networkController = gorillaComputer->networkController;
-            networkController->attemptingToConnect = false;
-
-            PhotonNetworkController* photonNetworkController = PhotonNetworkController::_get_instance();
-            
-            GameObject* currentGorillaParent = photonNetworkController->currentGorillaParent;
-
-            Array<GorillaScoreboardSpawner*>* scoreBoardSpawners = currentGorillaParent->GetComponentsInChildren<GorillaScoreboardSpawner*>();
-
-            for (int i = 0; i < scoreBoardSpawners->Length(); i++)
-            {
-                scoreBoardSpawners->values[i]->OnLeftRoom();
-            }
-            
-            Array<SkinnedMeshRenderer*>* offlineVRRig = networkController->offlineVRRig;
-            for (int i = 0; i < offlineVRRig->Length(); i++)
-            {
-                if (offlineVRRig->values[i])
-                {
-                    offlineVRRig->values[i]->set_enabled(true);
-                }
-            }
-
-            Array<GorillaLevelScreen*>* levelScreens = gorillaComputer->levelScreens;
-            
-            for (int i = 0; i < levelScreens->Length(); i++)
-            {
-                GorillaLevelScreen* screen = levelScreens->values[i];
-                Il2CppString* startingText = screen->startingText;
-                screen->UpdateText(startingText, true);
-            }
-
-            GorillaLocomotion::Player* player = GorillaLocomotion::Player::get_Instance();
-
-            player->maxJumpSpeed = 6.5f;
-            player->jumpMultiplier = 1.1f;
-
-            PhotonNetwork::Disconnect();
-            PhotonNetwork::ConnectUsingSettings();
+            PhotonNetworkController::_get_instance()->AttemptDisconnect();
         }
     }
 
@@ -151,59 +123,21 @@ namespace GorillaUI::BaseGameInterface
     {
         GorillaComputer* gorillaComputer = GorillaComputer::_get_instance();
         if (!gorillaComputer) return;
-        if (roomID == "") return;
+        if (roomID == "") return;        
         PhotonNetworkController* networkController = gorillaComputer->networkController;
-
-        networkController->currentGameType = il2cpp_utils::createcsstr("privatetag");
-        networkController->customRoomID = il2cpp_utils::createcsstr(roomID);
-        networkController->isPrivate = true;
-
-        std::string currentRoomName = "";
 
         Photon::Realtime::Room* currentRoom = PhotonNetwork::get_CurrentRoom();
 
+        std::string currentRoomName = "";
         if (currentRoom)
         {
             Il2CppString* currentRoomCsName = currentRoom->get_Name();
             currentRoomName = to_utf8(csstrtostr(currentRoomCsName));
         }
 
-        if (PhotonNetwork::get_InRoom() && currentRoomName != roomID)
+        if (currentRoomName != roomID)
         {
-            PhotonNetworkController* photonNetworkController = PhotonNetworkController::_get_instance();
-            GameObject* currentGorillaParent = photonNetworkController->currentGorillaParent;
-
-            Array<GorillaScoreboardSpawner*>* scoreBoardSpawners = currentGorillaParent->GetComponentsInChildren<GorillaScoreboardSpawner*>();
-
-            for (int i = 0; i < scoreBoardSpawners->Length(); i++)
-            {
-                scoreBoardSpawners->values[i]->OnLeftRoom();
-            }
-            
-            networkController->attemptingToConnect = true;
-
-            Array<SkinnedMeshRenderer*>* offlineVRRig = networkController->offlineVRRig;
-            for (int i = 0; i < offlineVRRig->Length(); i++)
-            {
-                if (offlineVRRig->values[i])
-                {
-                    offlineVRRig->values[i]->set_enabled(true);
-                }
-            }
-
-            PhotonNetwork::Disconnect();
-
-            GorillaLocomotion::Player* player = GorillaLocomotion::Player::get_Instance();
-
-            player->maxJumpSpeed = 6.5f;
-            player->jumpMultiplier = 1.1f;
-            return;
-        }
-
-        if (!PhotonNetwork::get_InRoom() && !networkController->attemptingToConnect)
-        {
-            networkController->attemptingToConnect = true;
-            networkController->AttemptToConnectToRoom();
+            PhotonNetworkController::_get_instance()->AttemptToJoinSpecificRoom(il2cpp_utils::createcsstr(roomID));
         }
     }
 
@@ -312,8 +246,8 @@ namespace GorillaUI::BaseGameInterface
 		if (flag)
 		{
             PhotonNetworkController* networkController = gorillaComputer->networkController;
-            networkController->joinWithFriends = true;
 
+            // get all player ids for checking who to send
             List<Il2CppString*>* playerIDsCurrentlyTouching = gorillaComputer->friendJoinCollider->playerIDsCurrentlyTouching;
             std::vector<std::string> playerIDsCurrentlyTouchingVector = {};
 
@@ -325,6 +259,7 @@ namespace GorillaUI::BaseGameInterface
                 playerIDsCurrentlyTouchingVector.push_back(playerID);
             }
             
+            // set list
             networkController->friendIDList = playerIDsCurrentlyTouching;
 
             static Il2CppString* empty = il2cpp_utils::createcsstr("", il2cpp_utils::StringType::Manual);
@@ -344,8 +279,10 @@ namespace GorillaUI::BaseGameInterface
                 std::string userID = to_utf8(csstrtostr(userIDCS));
                 std::vector<std::string>::iterator it = std::find(playerIDsCurrentlyTouchingVector.begin(), playerIDsCurrentlyTouchingVector.end(), userID);
 
+                // if player is close, that means join them
                 if (it != playerIDsCurrentlyTouchingVector.end() && !roomPlayer->Equals(localPlayer))
                 {
+                    // method name
                     static Il2CppString* joinPubWithFriends = il2cpp_utils::createcsstr("JoinPubWithFreinds", il2cpp_utils::StringType::Manual);
                     photonView->RPC(joinPubWithFriends, roomPlayer, System::Array::Empty<Il2CppObject*>());
                 }
@@ -353,21 +290,22 @@ namespace GorillaUI::BaseGameInterface
 
             PhotonNetwork::SendAllOutgoingCommands();
 
+            GorillaNetworkJoinTrigger* triggeredTrigger = nullptr;
+
 			if (group == "FOREST")
 			{
-				GorillaNetworkJoinTrigger* forestMapTrigger = gorillaComputer->forestMapTrigger;
-                forestMapTrigger->ComputerJoin();
+				triggeredTrigger = gorillaComputer->forestMapTrigger;
 			}
 			else if (group == "CAVE")
 			{
-				GorillaNetworkJoinTrigger* caveMapTrigger = gorillaComputer->caveMapTrigger;
-                caveMapTrigger->ComputerJoin();
+				triggeredTrigger = gorillaComputer->caveMapTrigger;
 			}
             else if (group == "CANYON")
 			{
-				GorillaNetworkJoinTrigger* canyonMapTrigger = gorillaComputer->canyonMapTrigger;
-                canyonMapTrigger->ComputerJoin();
+				triggeredTrigger = gorillaComputer->canyonMapTrigger;
 			}
+
+            PhotonNetworkController::_get_instance()->AttemptJoinPublicWithFriends(triggeredTrigger);
 		}
     }
 
@@ -472,6 +410,13 @@ namespace GorillaUI::BaseGameInterface
         {
             GorillaFriendCollider* friendJoinCollider = GorillaComputer::_get_instance()->friendJoinCollider;
             return friendJoinCollider->playerIDsCurrentlyTouching->size;
+        }
+
+        int get_bannedPlayers()
+        {
+            GorillaComputer* gorillaComputer = GorillaComputer::_get_instance();
+            if (!gorillaComputer) return -1;
+            return gorillaComputer->usersBanned;
         }
     }
 
