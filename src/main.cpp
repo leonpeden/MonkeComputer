@@ -178,7 +178,9 @@ MAKE_HOOK_OFFSETLESS(PlayFabAuthenticator_OnPlayFabError, void, GlobalNamespace:
         {
             if (entry.get_info().id == "Details")
             {
-                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(entry.get_view());
+                CustomComputer* pc = CustomComputer::get_instance();
+                if (pc)
+                    pc->activeViewManager->ReplaceTopView(entry.get_view());
                 break;
             }
         }
