@@ -19,6 +19,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameView, GorillaUI::Components::View,
     DECLARE_INSTANCE_FIELD(Components::View*, micChangeView);
     DECLARE_INSTANCE_FIELD(Components::View*, groupChangeView);
     DECLARE_INSTANCE_FIELD(Components::View*, queueChangeView);
+    DECLARE_INSTANCE_FIELD(Components::View*, voiceChatView);
 
     public:
         GorillaUI::UISelectionHandler* selectionHandler = nullptr;
@@ -39,6 +40,7 @@ DECLARE_CLASS_CODEGEN(GorillaUI, BaseGameView, GorillaUI::Components::View,
         REGISTER_FIELD(micChangeView);
         REGISTER_FIELD(groupChangeView);
         REGISTER_FIELD(queueChangeView);
+        REGISTER_FIELD(voiceChatView);
 
     )
 )

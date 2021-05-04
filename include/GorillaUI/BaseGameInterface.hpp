@@ -18,6 +18,7 @@ namespace GorillaUI::BaseGameInterface
     void InitTurnState();
     void InitAll();
     void ChangeTurnMode(std::string turnType, int turnValue);
+    void SetVoiceChat(bool value);
     std::string get_gameVersion();
 
     namespace SnapTurn
@@ -74,5 +75,10 @@ namespace GorillaUI::BaseGameInterface
     {
         std::string get_group();
         int groupToIndex(std::string group);
+    }
+
+    namespace Voice
+    {
+        bool get_voiceChat();
     }
 }

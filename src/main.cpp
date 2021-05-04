@@ -23,6 +23,7 @@
 #include "GorillaUI/BaseGameViews/QueueChangeView.hpp"
 #include "GorillaUI/BaseGameViews/MicChangeView.hpp"
 #include "GorillaUI/BaseGameViews/GroupChangeView.hpp"
+#include "GorillaUI/BaseGameViews/VoiceChatView.hpp"
 
 #include "MonkeComputerConfigView.hpp"
 
@@ -211,7 +212,7 @@ void loadlib()
     custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView, DetailView>();
     custom_types::Register::RegisterTypes<MainViewManager, MainView>();
 
-    custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView>();
+    custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView, VoiceChatView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
 
     custom_types::Register::RegisterType<CustomQueueView>();

@@ -9,6 +9,7 @@
 #include "GorillaUI/BaseGameViews/GroupChangeView.hpp"
 #include "GorillaUI/BaseGameViews/MicChangeView.hpp"
 #include "GorillaUI/BaseGameViews/QueueChangeView.hpp"
+#include "GorillaUI/BaseGameViews/VoiceChatView.hpp"
 #include "Helpers/SelectionHelper.hpp"
 #include "GorillaUI/BaseGameInterface.hpp"
 
@@ -27,12 +28,11 @@ namespace GorillaUI
         micChangeView = nullptr;
         groupChangeView = nullptr;
         queueChangeView = nullptr;
+        voiceChatView = nullptr;
 
         std::string gameVer = BaseGameInterface::get_gameVersion();
-        if (gameVer == "live102") old = true; 
-    	else if (gameVer == "live101") old = true;
         if (!selectionHandler) selectionHandler = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true, true);
-        selectionHandler->max = old ? 4 : 7;
+        selectionHandler->max = 8;
     }
 
     void BaseGameView::DidActivate(bool firstActivation)
@@ -78,6 +78,10 @@ namespace GorillaUI
                 if (!queueChangeView) queueChangeView = CreateView<QueueChangeView*>();
                 CustomComputer::get_instance()->activeViewManager->ReplaceTopView(queueChangeView);
                 break;
+            case 7:
+                if (!voiceChatView) voiceChatView = CreateView<VoiceChatView*>();
+                CustomComputer::get_instance()->activeViewManager->ReplaceTopView(voiceChatView);
+                break;
             default:
                 break;
         }
@@ -107,15 +111,12 @@ namespace GorillaUI
                 "Room Config",
                 "Name Config",
                 "Color Config",
-                "Turn Config"
+                "Turn Config",
+                "Mic Config",
+                "Group Config",
+                "Queue Config",
+                "Voice Config"
         };
-
-        if (!old)
-        {
-            views.push_back("Mic Config");
-            views.push_back("Group Config");
-            views.push_back("Queue Config");
-        }
 
         SelectionHelper::DrawSelection(views, selectionHandler->currentSelectionIndex, text);
     }

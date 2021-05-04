@@ -48,6 +48,7 @@ namespace GorillaUI::BaseGameInterface
     static Il2CppString* pttType = nullptr;
     static Il2CppString* currentQueue = nullptr;
     static Il2CppString* groupMapJoin = nullptr;
+    static Il2CppString* voiceChatOn = nullptr;
 
     void SetColor(float r, float g, float b)
     {
@@ -309,6 +310,21 @@ namespace GorillaUI::BaseGameInterface
 		}
     }
 
+    void SetVoiceChat(bool value)
+    {
+        GorillaComputer* gorillaComputer = GorillaComputer::_get_instance();
+        if (!gorillaComputer) return;
+
+        if (!voiceChatOn) voiceChatOn = il2cpp_utils::createcsstr("voiceChatOn", il2cpp_utils::StringType::Manual);
+
+        std::string stringToSet = value ? "TRUE" : "FALSE";
+        Il2CppString* stringToSetCS = il2cpp_utils::createcsstr(stringToSet);
+
+        gorillaComputer->voiceChatOn = stringToSetCS;
+        PlayerPrefs::SetString(voiceChatOn, stringToSetCS);
+        PlayerPrefs::Save();
+    }
+
 
     namespace SnapTurn
     {
@@ -468,6 +484,18 @@ namespace GorillaUI::BaseGameInterface
             if (group == "CAVE") return 1;
             else if (group == "CANYON") return 2;
             else return 0;
+        }
+    }
+
+    namespace Voice
+    {
+        bool get_voiceChat()
+        {
+            if (!voiceChatOn) voiceChatOn = il2cpp_utils::createcsstr("voiceChatOn", il2cpp_utils::StringType::Manual);
+            static Il2CppString* defaultVal = il2cpp_utils::createcsstr("TRUE", il2cpp_utils::StringType::Manual);
+
+            Il2CppString* value = PlayerPrefs::GetString(voiceChatOn, defaultVal);
+            return value ? value->Contains(defaultVal) : true;
         }
     }
 }
