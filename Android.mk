@@ -20,8 +20,6 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
 # Creating prebuilt for dependency: custom-types - version: 0.8.3
 include $(CLEAR_VARS)
-# Creating prebuilt for dependency: custom-types - version: 0.8.3
-include $(CLEAR_VARS)
 LOCAL_MODULE := custom-types
 LOCAL_EXPORT_C_INCLUDES := extern/custom-types
 LOCAL_SRC_FILES := extern/libcustom-types.so
@@ -73,6 +71,6 @@ LOCAL_SHARED_LIBRARIES += quest-cosmetic-loader_0_1_3
 LOCAL_SHARED_LIBRARIES += zip
 LOCAL_SHARED_LIBRARIES += monkecodegen_0_3_0
 LOCAL_LDLIBS += -llog
-LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"MonkeComputer"' -DVERSION='"1.3.4"' -I'./shared' -I'./extern' -Wno-inaccessible-base -Wno-invalid-offsetof
+LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"MonkeComputer"' -DVERSION='"1.4.0"' -I'./shared' -I'./extern' -Wno-inaccessible-base -Wno-invalid-offsetof
 LOCAL_C_INCLUDES += ./include ./src
 include $(BUILD_SHARED_LIBRARY)

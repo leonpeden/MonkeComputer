@@ -1,12 +1,17 @@
 #include "ViewLib/CustomComputer.hpp"
+#include "ViewLib/MonkeWatch.hpp"
+
 #include "Utils/TextUtils.hpp"
 #include "KeyExtension.hpp"
 #include "quest-cosmetic-loader/shared/CosmeticLoader.hpp"
 #include "GorillaUI/MainViewManager.hpp"
+#include "GorillaUI/MainWatchView.hpp"
 #include "config.hpp"
 
+#include "GorillaLocomotion/Player.hpp"
 #include "GlobalNamespace/GorillaComputer.hpp"
 #include "GlobalNamespace/GorillaKeyboardButton.hpp"
+#include "GlobalNamespace/TransformFollow.hpp"
 
 #include "UnityEngine/Object.hpp"
 #include "UnityEngine/GameObject.hpp"
@@ -17,6 +22,7 @@
 #include "UnityEngine/Vector3.hpp"
 
 #include "Utils/LoadUtils.hpp"
+#include "GorillaUI.hpp"
 DEFINE_TYPE(GorillaUI::CustomComputer);
 
 using namespace GorillaUI::Components;
@@ -27,6 +33,7 @@ extern Logger& getLogger();
 
 using namespace GlobalNamespace;
 using namespace UnityEngine;
+
 
 namespace GorillaUI
 {
@@ -74,9 +81,27 @@ namespace GorillaUI
         GameObject* newMonitor = nullptr;
         std::string path = "/sdcard/ModData/com.AnotherAxiom.GorillaTag/Mods/MonkeComputer/Monitor.package";
         auto* loader = new CosmeticLoader(path, [&](std::string name, Il2CppObject* obj){
-            newMonitor = (GameObject*)obj;
+            GameObject* package = (GameObject*)obj;
+            newMonitor = package->get_transform()->Find(il2cpp_utils::createcsstr("Monitor"))->get_gameObject();
+
+            // I shouldnt be doing this here but it would crash otherwise so fuck it
+            GameObject* watchObj = GameObject::New_ctor();
+            GlobalNamespace::TransformFollow* follow = watchObj->AddComponent<GlobalNamespace::TransformFollow*>();
+            watchObj->set_layer(18);
+            Transform* leftHand = GorillaLocomotion::Player::get_Instance()->get_transform()->Find(il2cpp_utils::createcsstr("TurnParent/LeftHand Controller"));
+            follow->transformToFollow = leftHand;
+
+            follow->offset = Vector3(-0.025f, -0.025f , -0.1f);
+            watchObj->get_transform()->set_localScale(Vector3::get_one() *.2f);
+
+            MonkeWatch* watch = watchObj->AddComponent<MonkeWatch*>();
+            watch->Init(CreateView<MainWatchView*>(), package->get_transform()->Find(il2cpp_utils::createcsstr("BananaWatch"))->get_gameObject());
+            watch->SetActive(false);
+
         }, "_Monitor", il2cpp_utils::GetSystemType("UnityEngine", "GameObject"));
         
+        getLogger().info("Monitor ptr: %p", newMonitor);
+
         newMonitor->set_name(il2cpp_utils::createcsstr("Custom Monitor"));
 
         Vector3 localScale = {0.4f, 0.4f, 0.4f};

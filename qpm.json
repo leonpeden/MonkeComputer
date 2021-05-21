@@ -4,12 +4,12 @@
   "info": {
     "name": "MonkeComputer",
     "id": "monkecomputer",
-    "version": "1.3.4",
+    "version": "1.4.0",
     "url": "https://github.com/RedBrumbler/MonkeComputer",
     "additionalData": {
       "overrideSoName": "libmonkecomputer.so",
-      "branchName": "version-v1.3.4",
-      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.3.4/libmonkecomputer.so"
+      "branchName": "version-v1.4.0",
+      "soLink": "https://github.com/RedBrumbler/MonkeComputer/releases/download/1.4.0/libmonkecomputer.so"
     }
   },
   "dependencies": [

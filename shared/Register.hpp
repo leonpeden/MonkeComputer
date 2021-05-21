@@ -64,21 +64,60 @@ namespace GorillaUI
                 RegisterSettingsViewManager(info, classof(T));
             }
 
+            template<class T>
+            static void RegisterWatchView(std::string name, std::string version) 
+            {
+                static_assert(std::is_convertible<T, Components::View*>());
+                RegisterWatchView({name, version}, classof(T));
+            }
+
+            template<class T>
+            static void RegisterWatchView(ModInfo info) 
+            {
+                static_assert(std::is_convertible<T, Components::View*>());
+                RegisterWatchView(info, classof(T));
+            }
+
+            template<class T>
+            static void RegisterWatchViewManager(std::string name, std::string version) 
+            {
+                static_assert(std::is_convertible<T, Components::ViewManager*>());
+                RegisterWatchViewManager({name, version}, classof(T));
+            }
+
+            template<class T>
+            static void RegisterWatchViewManager(ModInfo info) 
+            {
+                static_assert(std::is_convertible<T, Components::ViewManager*>());
+                RegisterWatchViewManager(info, classof(T));
+            }
+
             static std::vector<ModEntry>& get_entries();
             static std::vector<ModEntry>& get_settingsEntries();
+            static std::vector<ModEntry>& get_watchEntries();
+
             static ModEntry& get_entry(int index);
             static ModEntry& get_settingsEntry(int index);
+            static ModEntry& get_watchEntry(int index);
             
         private:
             static inline std::vector<ModEntry> entries = {};
             static inline std::vector<ModEntry> settingsentries = {};
+            static inline std::vector<ModEntry> watchentries = {};
+
             static void RegisterView(ModInfo info, Il2CppClass* klass);
             static void RegisterView(std::string name, std::string version, Il2CppClass* klass);
             static void RegisterViewManager(ModInfo info, Il2CppClass* klass);
             static void RegisterViewManager(std::string name, std::string version, Il2CppClass* klass);
+            
             static void RegisterSettingsView(ModInfo info, Il2CppClass* klass);
             static void RegisterSettingsView(std::string name, std::string version, Il2CppClass* klass);
             static void RegisterSettingsViewManager(ModInfo info, Il2CppClass* klass);
             static void RegisterSettingsViewManager(std::string name, std::string version, Il2CppClass* klass);
+
+            static void RegisterWatchView(ModInfo info, Il2CppClass* klass);
+            static void RegisterWatchView(std::string name, std::string version, Il2CppClass* klass);
+            static void RegisterWatchViewManager(ModInfo info, Il2CppClass* klass);
+            static void RegisterWatchViewManager(std::string name, std::string version, Il2CppClass* klass);
     };
 }

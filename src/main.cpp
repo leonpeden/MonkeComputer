@@ -10,6 +10,7 @@
 #include "GorillaUI.hpp"
 #include "GorillaUI/DetailView.hpp"
 #include "GorillaUI/MainView.hpp"
+#include "GorillaUI/MainWatchView.hpp"
 #include "GorillaUI/MainViewManager.hpp"
 #include "GorillaUI/ModSettingsView/ModSettingsView.hpp"
 #include "GorillaUI/ModSettingsView/ModSettingsViewManager.hpp"
@@ -28,8 +29,13 @@
 #include "MonkeComputerConfigView.hpp"
 
 #include "ViewLib/CustomComputer.hpp"
+#include "ViewLib/MonkeWatch.hpp"
+#include "ViewLib/MonkeWatchButton.hpp"
+#include "ViewLib/WatchActivatorTrigger.hpp"
+
 #include "Register.hpp"
 
+#include "BillboardedWatch.hpp"
 #include "CustomQueues.hpp"
 #include "GorillaUI/CustomQueueView.hpp"
 
@@ -40,6 +46,7 @@
 
 #include "UnityEngine/GameObject.hpp"
 #include "GlobalNamespace/GorillaComputer.hpp"
+#include "GorillaLocomotion/Player.hpp"
 #include "PlayFab/PlayFabError.hpp"
 #include "System/Collections/Generic/Dictionary_2.hpp"
 #include "System/Collections/Generic/KeyValuePair_2.hpp"
@@ -47,6 +54,7 @@
 #include "System/TimeSpan.hpp"
 
 #include "GlobalNamespace/PlayFabAuthenticator.hpp"
+#include "GlobalNamespace/TransformFollow.hpp"
 
 #include "CustomBackgrounds/BackgroundsList.hpp"
 #include "CustomBackgrounds/BackgroundsView.hpp"
@@ -69,11 +77,31 @@ Logger& getLogger()
 
 using namespace UnityEngine;
 using namespace GlobalNamespace;
+using namespace GorillaLocomotion;
+
+MAKE_HOOK_OFFSETLESS(Player_Awake, void, Player* self)
+{
+    Player_Awake(self);
+    return;
+
+    GameObject* watchObj = GameObject::New_ctor();
+    GlobalNamespace::TransformFollow* follow = watchObj->AddComponent<GlobalNamespace::TransformFollow*>();
+    watchObj->set_layer(18);
+    Transform* leftHand = self->get_transform()->Find(il2cpp_utils::createcsstr("TurnParent/LeftHand Controller"));
+    follow->transformToFollow = leftHand;
+
+    follow->offset = Vector3(-0.025f, -0.025f , -0.1f);
+    watchObj->get_transform()->set_localScale(Vector3::get_one() *.2f);
+
+    MonkeWatch* watch = watchObj->AddComponent<MonkeWatch*>();
+    watch->Init(CreateView<MainWatchView*>());
+    watch->SetActive(true);
+}
 
 MAKE_HOOK_OFFSETLESS(GorillaComputer_Start, void, GorillaComputer* self)
 {
     GorillaComputer_Start(self);
-
+    
     GameObject* computerGO = self->get_gameObject();
     CustomComputer* computer = computerGO->AddComponent<CustomComputer*>();
     computer->Init(CreateView<MainView*>());
@@ -205,12 +233,13 @@ void loadlib()
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_Start, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "Start", 0));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_CheckAutoBanList, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "CheckAutoBanList", 1));
     INSTALL_HOOK_OFFSETLESS(getLogger(), GorillaComputer_BanMe, il2cpp_utils::FindMethodUnsafe("", "GorillaComputer", "BanMe", 2));
+    INSTALL_HOOK_OFFSETLESS(getLogger(), Player_Awake, il2cpp_utils::FindMethodUnsafe("GorillaLocomotion", "Player", "Awake", 0));
     INSTALL_HOOK_OFFSETLESS(getLogger(), PlayFabAuthenticator_OnPlayFabError, il2cpp_utils::FindMethodUnsafe("", "PlayFabAuthenticator", "OnPlayFabError", 1));
     
     using namespace GorillaUI::Components;
-    custom_types::Register::RegisterTypes<CustomComputer, View, ViewManager, GorillaUI::Components::GorillaKeyboardButton>();
+    custom_types::Register::RegisterTypes<CustomComputer, MonkeWatch, View, ViewManager, GorillaUI::Components::GorillaKeyboardButton, MonkeWatchButton, WatchActivatorTrigger, BillboardedWatch>();
     custom_types::Register::RegisterTypes<ModSettingsViewManager, ModSettingsView, DetailView>();
-    custom_types::Register::RegisterTypes<MainViewManager, MainView>();
+    custom_types::Register::RegisterTypes<MainViewManager, MainView, MainWatchView>();
 
     custom_types::Register::RegisterTypes<ColorChangeView, NameChangeView, CustomRoomView, TurnChangeView, MicChangeView, GroupChangeView, QueueChangeView, VoiceChatView>();
     custom_types::Register::RegisterTypes<BaseGameViewManager, BaseGameView>();
