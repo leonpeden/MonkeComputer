@@ -412,7 +412,7 @@ namespace GorillaUI::BaseGameInterface
 
         int get_currentPlayers()
         {
-            return PhotonNetwork::get_CountOfPlayersInRooms();
+            return PhotonNetworkController::_get_instance()->TotalUsers();
         }
 
         char get_playerCount()

@@ -33,7 +33,7 @@ namespace GorillaUI::Components
         if (didDeactivate)
             il2cpp_utils::RunMethod(this, didDeactivate);
     }
-   
+    
     void ViewManager::PresentViewManager(GorillaUI::Components::ViewManager* manager)
     {
         childViewManager = manager;
