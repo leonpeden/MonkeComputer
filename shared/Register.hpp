@@ -92,6 +92,15 @@ namespace GorillaUI
                 RegisterWatchViewManager(info, classof(T));
             }
 
+            static void RegisterCallback(std::string name, std::string version, ModEntry::EntryCallback callback);
+            static void RegisterCallback(ModInfo info, ModEntry::EntryCallback callback);
+
+            static void RegisterSettingsCallback(std::string name, std::string version, ModEntry::EntryCallback callback);
+            static void RegisterSettingsCallback(ModInfo info, ModEntry::EntryCallback callback);
+
+            static void RegisterWatchCallback(std::string name, std::string version, ModEntry::EntryCallback callback);
+            static void RegisterWatchCallback(ModInfo info, ModEntry::EntryCallback callback);
+
             static std::vector<ModEntry>& get_entries();
             static std::vector<ModEntry>& get_settingsEntries();
             static std::vector<ModEntry>& get_watchEntries();

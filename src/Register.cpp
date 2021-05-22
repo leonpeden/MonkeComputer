@@ -62,6 +62,36 @@ namespace GorillaUI
         watchentries.push_back(ModEntry({name, version}, klass, ModEntry::EntryType::ViewManager));
     }
 
+    void Register::RegisterCallback(std::string name, std::string version, ModEntry::EntryCallback callback)
+    {
+        RegisterCallback({name, version}, callback);
+    }
+
+    void Register::RegisterCallback(ModInfo info, ModEntry::EntryCallback callback)
+    {
+        entries.push_back(ModEntry(info, callback));
+    }
+
+    void Register::RegisterSettingsCallback(std::string name, std::string version, ModEntry::EntryCallback callback)
+    {
+        RegisterSettingsCallback({name, version}, callback);
+    }
+
+    void Register::RegisterSettingsCallback(ModInfo info, ModEntry::EntryCallback callback)
+    {
+        settingsentries.push_back(ModEntry(info, callback));
+    }
+
+    void Register::RegisterWatchCallback(std::string name, std::string version, ModEntry::EntryCallback callback)
+    {
+        RegisterWatchCallback({name, version}, callback);
+    }
+
+    void Register::RegisterWatchCallback(ModInfo info, ModEntry::EntryCallback callback)
+    {
+        watchentries.push_back(ModEntry(info, callback));
+    }
+
     std::vector<ModEntry>& Register::get_entries()
     {
         return entries;

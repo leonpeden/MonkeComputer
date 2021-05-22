@@ -9,6 +9,12 @@ namespace GorillaUI
         viewManager = nullptr;
     }
 
+    ModEntry::ModEntry(ModInfo info, EntryCallback callback) : info(info), callback(callback), type(EntryType::Callback) 
+    { 
+        view = nullptr; 
+        viewManager = nullptr;
+    }
+
     const ModInfo& ModEntry::get_info() const
     {
         return info;
@@ -38,4 +44,9 @@ namespace GorillaUI
         return type;
     }
 
+    void ModEntry::RunCallback()
+    {
+        if (type != EntryType::Callback) return;
+        callback();
+    }
 }

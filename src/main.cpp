@@ -38,6 +38,7 @@
 #include "BillboardedWatch.hpp"
 #include "CustomQueues.hpp"
 #include "GorillaUI/CustomQueueView.hpp"
+#include "GorillaUI/BaseGameInterface.hpp"
 
 #include "typedefs.h"
 #include <vector>
@@ -255,7 +256,11 @@ void loadlib()
     
     GorillaUI::Register::RegisterSettingsView<MonkeComputerConfigView*>("Monke Computer", VERSION);
     GorillaUI::Register::RegisterSettingsView<BackgroundsView*>("Custom Backgrounds", VERSION);
-
+    
+    GorillaUI::Register::RegisterWatchCallback("Disconnect", VERSION, []{
+        BaseGameInterface::Disconnect();
+    });
+    
     CustomQueues::add_queue("MODDED", "Modded", "  <size=40>A Queue for modded players, outside of the normal public lobbies.\n    You can't really report anyone for having a mod here, but griefing\n    is still prohibited.\n</size>");
     INFO("Mod Loaded!");
 }

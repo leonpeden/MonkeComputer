@@ -50,6 +50,9 @@ namespace GorillaUI
             case ModEntry::EntryType::ViewManager:
                 computer->activeViewManager->PresentViewManager(entry.get_viewManager());
                 break;
+            case ModEntry::EntryType::Callback:
+                entry.RunCallback();
+                break;
             default:
                 return;
         }

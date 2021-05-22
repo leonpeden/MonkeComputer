@@ -55,6 +55,9 @@ namespace GorillaUI
             case ModEntry::EntryType::ViewManager:
                 MonkeWatch::get_instance()->activeViewManager->PresentViewManager(entry.get_viewManager());
                 break;
+            case ModEntry::EntryType::Callback:
+                entry.RunCallback();
+                break;
             default:
                 return;
         }

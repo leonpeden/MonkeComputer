@@ -36,6 +36,14 @@ namespace GorillaUI
         return result;
     }
 
+    void Innit()
+    {
+        if (loaded) return;
+        getLogger().info("Cheers bruv");
+        loaded = true;
+        loadlib();
+    }
+
     void Init()
     {
         if (loaded) return;
